@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebCraftStudio | Web Applications Showcase</title>
-    
-    <!-- PWA Manifest & Mobile Config -->
-    <link rel="manifest" href="manifest.json">
+
+    <!-- Mobile Metadata -->
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="WebCraft">
 
+    <!-- Open Source Add-to-Screen Component (PWABuilder CDN) -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@pwabuilder/pwainstall"></script>
+
     <style>
-        /* Base Reset & Variables */
+        /* Base Reset & Layout */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -30,7 +32,7 @@
             min-height: 100vh;
         }
 
-        /* Header & Hero */
+        /* Header & Actions */
         header {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             color: #ffffff;
@@ -68,35 +70,10 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Add to Home Screen Button */
-        .install-btn {
-            background-color: #10b981;
-            color: #ffffff;
-            border: none;
-            padding: 0.65rem 1.25rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-            transition: background 0.2s ease, transform 0.2s ease;
-            display: none; /* Hidden until browser triggers install prompt */
-        }
-
-        .install-btn:hover {
-            background-color: #059669;
-            transform: translateY(-2px);
-        }
-
-        /* iOS Fallback Banner */
-        .ios-banner {
-            display: none;
-            background-color: #3b82f6;
-            color: white;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
+        /* Customize PWABuilder Web Component Button */
+        pwa-install {
+            --install-button-color: #10b981;
+            --modal-z-index: 9999;
         }
 
         /* Main Showcase Container */
@@ -194,10 +171,14 @@
         
         <div class="header-actions">
             <input type="text" id="searchInput" class="search-bar" placeholder="Search projects...">
-            <button id="installBtn" class="install-btn">📲 Add to Home Screen</button>
-            <div id="iosBanner" class="ios-banner">
-                Tap <strong>Share</strong> (bottom bar) and select <strong>"Add to Home Screen"</strong> 📲
-            </div>
+            
+            <!-- Open Source Web Component for Add to Screen -->
+            <pwa-install 
+                name="WebCraftStudio" 
+                icon="https://via.placeholder.com/192" 
+                installbuttontext="📲 Add to Screen" 
+                description="Access WebCraftStudio web apps directly from your home screen.">
+            </pwa-install>
         </div>
     </header>
 
@@ -249,9 +230,8 @@
         <p>&copy; 2026 WebCraftStudio. Built with standard HTML, CSS, and JavaScript.</p>
     </footer>
 
-    <!-- JavaScript Engine -->
+    <!-- Search Logic -->
     <script>
-        // 1. App Search Logic
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('searchInput');
             const projectCards = document.querySelectorAll('#projectGrid .card');
@@ -271,42 +251,6 @@
                 });
             });
         });
-
-        // 2. Add to Home Screen (PWA Installation) Logic
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-        const iosBanner = document.getElementById('iosBanner');
-
-        // Check for Android / Chrome / Edge installation event
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'block'; // Show the install button
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installBtn.style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-
-        // Hide install button when app is already installed
-        window.addEventListener('appinstalled', () => {
-            installBtn.style.display = 'none';
-        });
-
-        // Detect iOS devices (Safari does not support beforeinstallprompt)
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-
-        if (isIOS && !isStandalone) {
-            iosBanner.style.display = 'block';
-        }
     </script>
 </body>
 </html>
