@@ -57,7 +57,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .app-brand { font-size: 1rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
-    .nav-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .nav-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
     .nav-btn {
       background: transparent;
       border: 1px solid var(--border);
@@ -67,6 +67,10 @@
       font-weight: 600;
       color: var(--text);
       cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.2s;
     }
     .nav-btn:hover { background: var(--bg); border-color: var(--primary); color: var(--primary); }
@@ -354,7 +358,8 @@
       File Converter
     </div>
     <div class="nav-actions">
-      <button class="nav-btn" id="navHomeBtn" href="index.html">Home</button>
+      <a href="index.html" class="nav-btn">🏠 Home</a>
+      <button class="nav-btn" id="navShareBtn">🔗 Share</button>
       <button class="nav-btn nav-btn-highlight" id="navInstallBtn">📲 Install App</button>
       <button class="nav-btn" id="navHelpBtn">Help</button>
       <button class="nav-btn" id="navAboutBtn">About</button>
@@ -731,7 +736,7 @@
   const docIframe = document.getElementById('docIframe');
 
   // Navigation & Modal Elements
-  const navHomeBtn = document.getElementById('navHomeBtn');
+  const navShareBtn = document.getElementById('navShareBtn');
   const navInstallBtn = document.getElementById('navInstallBtn');
   const navHelpBtn = document.getElementById('navHelpBtn');
   const navAboutBtn = document.getElementById('navAboutBtn');
@@ -742,9 +747,28 @@
   const closeAboutBtn = document.getElementById('closeAboutBtn');
   const closeInstallBtn = document.getElementById('closeInstallBtn');
 
-  navHomeBtn.addEventListener('click', () => {
-    tabUpload.click();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Share functionality
+  const shareUrl = 'https://webdeveloper-cpu.github.io/WebCraftStudio/file_converter.html';
+  navShareBtn.addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'File Converter',
+          text: 'Convert images, Word DOCX, PDFs, and Google Docs directly in your browser.',
+          url: shareUrl
+        });
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('Share failed:', err);
+        }
+      }
+    } else {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        alert('Link copied to clipboard!\n' + shareUrl);
+      }).catch(() => {
+        alert('Share link:\n' + shareUrl);
+      });
+    }
   });
 
   navInstallBtn.addEventListener('click', () => installModal.classList.add('active'));
