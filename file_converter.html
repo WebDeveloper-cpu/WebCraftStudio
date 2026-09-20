@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>File Converter</title>
+  <meta name="description" content="Convert images, Word DOCX, PDFs, and Google Docs directly in your browser. Fast, free, and secure client-side file conversion tool." />
+
+  <!-- Security: Content Security Policy (CSP) updated for external affiliate & ad links -->
+  <meta http-equiv="Content-Security-Policy" 
+        content="default-src 'self' data: blob: https://cdnjs.cloudflare.com https://docs.google.com https://www.hostafrica.ng https://app.gotechafrica.com https://app.getcleva.com https://monetag.com https://omg10.com; 
+                 style-src 'self' 'unsafe-inline'; 
+                 script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
+                 img-src 'self' data: blob: https:; 
+                 frame-src https://docs.google.com https://www.hostafrica.ng https://app.gotechafrica.com https://app.getcleva.com https://monetag.com https://omg10.com; 
+                 connect-src 'self' https://cdnjs.cloudflare.com https://docs.google.com https://www.hostafrica.ng https://app.gotechafrica.com https://app.getcleva.com https://monetag.com https://omg10.com;">
+
+  <!-- Global Error Handler for Missing External Scripts -->
+  <script>
+    window.addEventListener('error', function(e) {
+      if (e.target.tagName === 'SCRIPT') {
+        console.error('Failed to load dependency:', e.target.src);
+        alert('Notice: A required resource failed to load. Please check your internet connection.');
+      }
+    }, true);
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 1rem 1.5rem 1.5rem 1.5rem; display: flex; justify-content: center; }
+    .container { max-width: 900px; width: 100%; }
+    
+    /* Native Navigation Bar */
+    nav.app-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .app-brand { font-size: 1rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
+    .nav-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--bg); border-color: var(--primary); color: var(--primary); }
+    .nav-btn-highlight {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .nav-btn-highlight:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+
+    header { text-align: center; margin-bottom: 1.5rem; }
+    header h1 { font-size: 1.8rem; color: var(--text); margin-bottom: 0.5rem; }
+    header p { color: var(--text-muted); font-size: 0.95rem; }
+
+    .webview-wrapper {
+      display: none;
+      width: 100%;
+      height: 450px;
+      margin-bottom: 1.5rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .webview-wrapper iframe { width: 100%; height: 100%; border: none; }
+
+    .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; justify-content: center; }
+    .tab-btn {
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .drop-zone {
+      border: 2px dashed var(--primary);
+      border-radius: 12px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      background-color: #f0f3ff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .drop-zone:hover, .drop-zone.dragover { background-color: #e0e7ff; border-color: var(--primary-hover); }
+    .drop-zone p { margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem; }
+    .drop-zone input { display: none; }
+
+    .gdoc-box {
+      display: none;
+      background: white;
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+    .gdoc-box.active { display: block; }
+    .gdoc-input-group { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    .gdoc-input-group input { flex: 1; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; }
+
+    .app-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    @media (max-width: 768px) { 
+      .app-body { grid-template-columns: 1fr; } 
+    }
+
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .card h2 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--text); }
+
+    .preview-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 250px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .preview-container img, .preview-container canvas { max-width: 100%; max-height: 250px; object-fit: contain; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+    .form-group select, .form-group input[type="number"], .form-group input[type="range"] {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      outline: none;
+    }
+    
+    .row { display: flex; gap: 1rem; }
+    .row .form-group { flex: 1; }
+
+    /* Affiliate Banner above Convert & Save button */
+    .affiliate-banner-container {
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .affiliate-card {
+      display: block;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      text-decoration: none;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      transition: opacity 0.3s ease-in-out, transform 0.2s;
+    }
+    .affiliate-card * {
+      pointer-events: none;
+    }
+    .affiliate-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(79, 70, 229, 0.2);
+    }
+    .aff-tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      color: #cbd5e1;
+      display: inline-block;
+      margin-bottom: 0.3rem;
+    }
+    .aff-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.2rem;
+    }
+    .aff-desc {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      margin-bottom: 0.5rem;
+    }
+    .aff-cta {
+      display: inline-block;
+      background: #4f46e5;
+      color: #ffffff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn:hover { background-color: var(--primary-hover); }
+    .btn:disabled { background-color: #a5b4fc; cursor: not-allowed; }
+
+    .pdf-controls { display: none; margin-bottom: 1rem; }
+    .pdf-controls.active { display: block; }
+
+    .gdoc-links { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+    .gdoc-link-btn {
+      display: inline-block;
+      text-align: center;
+      padding: 0.6rem;
+      background: #e0e7ff;
+      color: var(--primary);
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .gdoc-link-btn:hover { background: #c7d2fe; }
+
+    /* Modal Overlay and Content Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      max-width: 550px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .modal-header h3 { font-size: 1.2rem; color: var(--text); }
+    .modal-close { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+    .modal-body { font-size: 0.9rem; color: var(--text); line-height: 1.6; }
+    .modal-body ul, .modal-body ol { margin-left: 1.2rem; margin-top: 0.4rem; margin-bottom: 0.8rem; }
+    .modal-body h4 { font-size: 0.98rem; margin-top: 0.8rem; color: var(--primary); display: flex; align-items: center; gap: 0.4rem; }
+
+    /* Screen Locker Modal Overlay */
+    .locker-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .locker-overlay.active { display: flex; }
+    .locker-card {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 420px;
+      width: 100%;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    .locker-icon {
+      width: 60px;
+      height: 60px;
+      background: #e0e7ff;
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem auto;
+    }
+    .locker-card h2 { font-size: 1.35rem; color: var(--text); margin-bottom: 0.5rem; }
+    .locker-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5; }
+    .locker-btn {
+      display: block;
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      transition: background 0.2s;
+    }
+    .locker-btn:hover { background: var(--primary-hover); }
+
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<main class="container">
+  <!-- Native App Navigation Bar -->
+  <nav class="app-bar" aria-label="Main Navigation">
+    <div class="app-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+      File Converter
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" id="navHomeBtn" href="index.html">Home</button>
+      <button class="nav-btn nav-btn-highlight" id="navInstallBtn">📲 Install App</button>
+      <button class="nav-btn" id="navHelpBtn">Help</button>
+      <button class="nav-btn" id="navAboutBtn">About</button>
+    </div>
+  </nav>
+
+  <header>
+    <h1>File Converter</h1>
+    <p>Convert images, Word documents, PDFs, and Google Docs locally on your device.</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" id="tabUpload" role="tab">Upload File (Image/PDF/Docx)</button>
+    <button class="tab-btn" id="tabGDoc" role="tab">Google Doc URL</button>
+  </div>
+
+  <section class="drop-zone" id="dropZone">
+    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color: var(--primary)" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"></path>
+    </svg>
+    <h2>Tap or Drag File Here</h2>
+    <p>Supports PNG, JPG, WEBP, BMP, PDF, and DOCX files</p>
+    <input type="file" id="fileInput" accept="image/*,.pdf,.docx,.txt" aria-label="Upload file for conversion" />
+  </section>
+
+  <section class="gdoc-box" id="gdocBox">
+    <h2>Convert Google Doc via Link</h2>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0.2rem;">Make sure sharing permission is set to "Anyone with the link can view".</p>
+    <div class="gdoc-input-group">
+      <input type="url" id="gdocUrlInput" placeholder="https://docs.google.com/document/d/.../edit" aria-label="Google Doc URL input" />
+      <button class="btn" id="parseGDocBtn" style="margin-top:0; width:auto;">Process Link</button>
+    </div>
+    <div class="gdoc-links" id="gdocDownloadLinks"></div>
+  </section>
+
+  <section class="webview-wrapper" id="webviewWrapper">
+    <iframe id="docIframe" title="Document Preview Webview"></iframe>
+  </section>
+
+  <section class="app-body">
+    <div class="card">
+      <h2>Document Preview</h2>
+      
+      <div class="pdf-controls" id="pdfControls">
+        <div class="form-group">
+          <label>PDF Page Selection</label>
+          <div class="row">
+            <button type="button" id="prevPage" style="padding: 0 10px;" aria-label="Previous page">&lt;</button>
+            <span id="pageNumDisplay" style="line-height:2.2; font-size: 0.9rem;">Page 1 of 1</span>
+            <button type="button" id="nextPage" style="padding: 0 10px;" aria-label="Next page">&gt;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-container">
+        <p id="placeholderText" style="color: var(--text-muted);">No file selected</p>
+        <canvas id="previewCanvas" style="display: none;"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Conversion Settings</h2>
+      
+      <div class="form-group">
+        <label for="formatSelect">Target Format</label>
+        <select id="formatSelect">
+          <option value="image/png">PNG Image</option>
+          <option value="image/jpeg">JPEG Image</option>
+          <option value="image/webp">WEBP Image</option>
+          <option value="image/bmp">BMP Image</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="widthInput">Width (px)</label>
+          <input type="number" id="widthInput" placeholder="Auto" />
+        </div>
+        <div class="form-group">
+          <label for="heightInput">Height (px)</label>
+          <input type="number" id="heightInput" placeholder="Auto" />
+        </div>
+      </div>
+
+      <div class="form-group" id="qualityGroup">
+        <label for="qualityInput">Quality: <span id="qualityVal">90</span>%</label>
+        <input type="range" id="qualityInput" min="10" max="100" value="90" />
+      </div>
+
+      <!-- Rotating 15-Second Affiliate Banner Placement Above Button -->
+      <div class="affiliate-banner-container">
+        <a id="affBannerCard" class="affiliate-card" href="https://www.hostafrica.ng/website-builder/easy-ai-builder/?aff=3440" target="_blank" rel="noopener noreferrer">
+          <span class="aff-tag" id="affTag">AI Web Development</span>
+          <div class="aff-title" id="affTitle">HOSTAFRICA AI Builder</div>
+          <div class="aff-desc" id="affDesc">Build your professional website in minutes with powerful AI tools.</div>
+          <span class="aff-cta" id="affCta">Try AI Builder &rarr;</span>
+        </a>
+      </div>
+
+      <button class="btn" id="downloadBtn" disabled>Convert & Save</button>
+    </div>
+  </section>
+
+  <!-- Install App Modal -->
+  <div class="modal-overlay" id="installModal" role="dialog" aria-modal="true" aria-labelledby="installModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="installModalTitle">Add to Home Screen</h3>
+        <button class="modal-close" id="closeInstallBtn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Install File Converter directly to your mobile home screen or desktop for quick access and offline use across popular web browsers:</p>
+
+        <h4>🌐 Google Chrome (Android / Desktop)</h4>
+        <ol>
+          <li>Tap the <strong>three-dots menu icon (⋮)</strong> in the top-right corner.</li>
+          <li>Select <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.</li>
+          <li>Tap <strong>Add / Install</strong> to confirm.</li>
+        </ol>
+
+        <h4>🌐 Safari (iPhone / iPad / Mac)</h4>
+        <ol>
+          <li>Tap the <strong>Share icon</strong> (square with an up arrow) at the bottom toolbar.</li>
+          <li>Scroll down and select <strong>"Add to Home Screen"</strong>.</li>
+          <li>Tap <strong>Add</strong> in the top right corner.</li>
+        </ol>
+
+        <h4>🌐 Opera Mini & Opera Mobile</h4>
+        <ol>
+          <li>Tap the <strong>Opera logo (O)</strong> or <strong>three-dots menu</strong> in the navigation bar.</li>
+          <li>Select <strong>"Add to Home screen"</strong> or tap the <strong>"+" (Plus)</strong> icon next to the address bar.</li>
+          <li>Confirm by tapping <strong>Add</strong>.</li>
+        </ol>
+
+        <h4>🌐 Microsoft Edge</h4>
+        <ol>
+          <li>Tap the <strong>three-dots menu (•••)</strong> at the bottom center or top right.</li>
+          <li>Select <strong>"Add to phone"</strong> or <strong>"Install site as an app"</strong>.</li>
+          <li>Tap <strong>Add</strong> to save the web app.</li>
+        </ol>
+
+        <h4>🌐 Mozilla Firefox</h4>
+        <ol>
+          <li>Tap the <strong>three-dots menu (⋮)</strong> next to the address bar.</li>
+          <li>Select <strong>"Install"</strong> or <strong>"Add to Home screen"</strong>.</li>
+          <li>Confirm by selecting <strong>Add automatically</strong>.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen Locker Modal -->
+  <div class="locker-overlay" id="screenLocker">
+    <div class="locker-card">
+      <div class="locker-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      </div>
+      <h2>Content Locked</h2>
+      <p>Please click the button below and view the ad to continue using File Converter.</p>
+      <a href="#" class="locker-btn" id="lockerAdLink" target="_blank">View Ad to Continue &rarr;</a>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="helpModalTitle">Help & Instructions</h3>
+        <button class="modal-close" id="closeHelpBtn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Converting Local Files:</strong></p>
+        <ul>
+          <li>Tap the drop zone or drag files into it.</li>
+          <li>Supported formats: Images (PNG, JPG, WEBP), PDF documents, Word DOCX, and TXT files.</li>
+          <li>Adjust width, height, and quality settings on the right panel before saving.</li>
+        </ul>
+        <p><strong>Converting Google Docs:</strong></p>
+        <ul>
+          <li>Switch to the "Google Doc URL" tab.</li>
+          <li>Paste the public link of your Google Doc and tap "Process Link".</li>
+          <li>Download the file directly as PDF, DOCX, TXT, or ODT.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div class="modal-overlay" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="aboutModalTitle">About File Converter</h3>
+        <button class="modal-close" id="closeAboutBtn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>File Converter v1.0</strong></p>
+        <p style="margin-top: 0.5rem;">This utility provides client-side file and document conversions directly on your device without transmitting data to external servers.</p>
+        <p style="margin-top: 0.5rem;"><strong>Security & Privacy:</strong> All standard file conversions occur within your active browser session for data privacy.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legal & Privacy Disclaimer -->
+  <footer>
+    <p><strong>Privacy Notice:</strong> All local file conversions occur securely inside your browser session. Files are never uploaded or stored on any external servers.</p>
+    <p style="margin-top:0.3rem;">Google Docs is a trademark of Google LLC. This tool is an independent utility and is not affiliated with Google.</p>
+  </footer>
+</main>
+
+<script>
+  // 1. Rotating Affiliate Banners (15 seconds interval)
+  const affiliateOffers = [
+    {
+      tag: "AI Web Development",
+      title: "HOSTAFRICA AI Builder",
+      desc: "Build your professional website in minutes with powerful AI tools.",
+      cta: "Try AI Builder",
+      url: "https://www.hostafrica.ng/website-builder/easy-ai-builder/?aff=3440"
+    },
+    {
+      tag: "Tech Education",
+      title: "GoTech Africa Training",
+      desc: "Master in-demand digital tech skills with practical courses across Africa.",
+      cta: "Join Program",
+      url: "https://app.gotechafrica.com/go-invite?mref=7936"
+    },
+    {
+      tag: "Global Banking",
+      title: "Cleva USD Banking",
+      desc: "Receive USD payments easily from global clients with a virtual US bank account.",
+      cta: "Open USD Account",
+      url: "https://app.getcleva.com/refer/CHUK6191"
+    },
+    {
+      tag: "Monetization",
+      title: "Monetag Ad Network",
+      desc: "Monetize web traffic and mobile applications with high CPM ads.",
+      cta: "Start Monetizing",
+      url: "https://monetag.com/?ref_id=zUg8"
+    }
+  ];
+
+  let currentAffIndex = 0;
+  const affBannerCard = document.getElementById('affBannerCard');
+  const affTag = document.getElementById('affTag');
+  const affTitle = document.getElementById('affTitle');
+  const affDesc = document.getElementById('affDesc');
+  const affCta = document.getElementById('affCta');
+
+  function updateBanner(index) {
+    const offer = affiliateOffers[index];
+    affBannerCard.setAttribute('href', offer.url);
+    affBannerCard.setAttribute('target', '_blank');
+    affBannerCard.setAttribute('rel', 'noopener noreferrer');
+    affTag.textContent = offer.tag;
+    affTitle.textContent = offer.title;
+    affDesc.textContent = offer.desc;
+    affCta.innerHTML = `${offer.cta} &rarr;`;
+  }
+
+  function rotateAffiliateBanner() {
+    affBannerCard.style.opacity = '0';
+    setTimeout(() => {
+      currentAffIndex = (currentAffIndex + 1) % affiliateOffers.length;
+      updateBanner(currentAffIndex);
+      affBannerCard.style.opacity = '1';
+    }, 300);
+  }
+
+  // Set initial state immediately
+  updateBanner(0);
+
+  // Rotate every 15 seconds (15000ms)
+  setInterval(rotateAffiliateBanner, 15000);
+
+  // 2. Screen Locker Timers & Return Logic
+  const lockAds = [
+    "https://omg10.com/4/9317445",
+    "https://omg10.com/4/9300114",
+    "https://omg10.com/4/9797627"
+  ];
+
+  const screenLocker = document.getElementById('screenLocker');
+  const lockerAdLink = document.getElementById('lockerAdLink');
+  let currentLockStep = 0;
+  let lockerTimers = [];
+
+  function showScreenLocker(adUrl) {
+    lockerAdLink.href = adUrl;
+    screenLocker.classList.add('active');
+  }
+
+  function hideScreenLocker() {
+    screenLocker.classList.remove('active');
+  }
+
+  function startLockerSequence() {
+    // Clear existing pending timers
+    lockerTimers.forEach(t => clearTimeout(t));
+    lockerTimers = [];
+
+    // Lock 1: 20 seconds (20,000 ms)
+    lockerTimers.push(setTimeout(() => {
+      currentLockStep = 0;
+      showScreenLocker(lockAds[0]);
+    }, 60000));
+
+    // Lock 2: 60 seconds (60,000 ms)
+    lockerTimers.push(setTimeout(() => {
+      currentLockStep = 1;
+      showScreenLocker(lockAds[1]);
+    }, 120000));
+
+    // Lock 3: 90 seconds / 1 min 30s (90,000 ms)
+    lockerTimers.push(setTimeout(() => {
+      currentLockStep = 2;
+      showScreenLocker(lockAds[2]);
+      // Restart cycle loop after 90s lock completes
+      setTimeout(startLockerSequence, 1000);
+    }, 180000));
+  }
+
+  // Handle click on the ad locker button
+  lockerAdLink.addEventListener('click', () => {
+    // Push a history state so when the user clicks back in browser, we pop it and close locker
+    history.pushState({ lockerOpen: true }, '');
+    
+    // Auto-unlock the screen so when user returns via back button, page is available
+    setTimeout(() => {
+      hideScreenLocker();
+    }, 500);
+  });
+
+  // Listener for browser Back button (popstate)
+  window.addEventListener('popstate', (e) => {
+    hideScreenLocker();
+  });
+
+  // Start the locker cycle when page loads
+  startLockerSequence();
+
+  // 3. Network Availability Detection
+  window.addEventListener('offline', () => {
+    alert('Notice: You are offline. Local file conversion is available, but online web features require a connection.');
+  });
+
+  if (typeof pdfjsLib !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const previewCanvas = document.getElementById('previewCanvas');
+  const placeholderText = document.getElementById('placeholderText');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const formatSelect = document.getElementById('formatSelect');
+  const qualityInput = document.getElementById('qualityInput');
+  const qualityVal = document.getElementById('qualityVal');
+  const widthInput = document.getElementById('widthInput');
+  const heightInput = document.getElementById('heightInput');
+  const pdfControls = document.getElementById('pdfControls');
+  const prevPageBtn = document.getElementById('prevPage');
+  const nextPageBtn = document.getElementById('nextPage');
+  const pageNumDisplay = document.getElementById('pageNumDisplay');
+
+  const tabUpload = document.getElementById('tabUpload');
+  const tabGDoc = document.getElementById('tabGDoc');
+  const gdocBox = document.getElementById('gdocBox');
+  const parseGDocBtn = document.getElementById('parseGDocBtn');
+  const gdocUrlInput = document.getElementById('gdocUrlInput');
+  const gdocDownloadLinks = document.getElementById('gdocDownloadLinks');
+
+  const webviewWrapper = document.getElementById('webviewWrapper');
+  const docIframe = document.getElementById('docIframe');
+
+  // Navigation & Modal Elements
+  const navHomeBtn = document.getElementById('navHomeBtn');
+  const navInstallBtn = document.getElementById('navInstallBtn');
+  const navHelpBtn = document.getElementById('navHelpBtn');
+  const navAboutBtn = document.getElementById('navAboutBtn');
+  const helpModal = document.getElementById('helpModal');
+  const aboutModal = document.getElementById('aboutModal');
+  const installModal = document.getElementById('installModal');
+  const closeHelpBtn = document.getElementById('closeHelpBtn');
+  const closeAboutBtn = document.getElementById('closeAboutBtn');
+  const closeInstallBtn = document.getElementById('closeInstallBtn');
+
+  navHomeBtn.addEventListener('click', () => {
+    tabUpload.click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  navInstallBtn.addEventListener('click', () => installModal.classList.add('active'));
+  navHelpBtn.addEventListener('click', () => helpModal.classList.add('active'));
+  navAboutBtn.addEventListener('click', () => aboutModal.classList.add('active'));
+
+  closeInstallBtn.addEventListener('click', () => installModal.classList.remove('active'));
+  closeHelpBtn.addEventListener('click', () => helpModal.classList.remove('active'));
+  closeAboutBtn.addEventListener('click', () => aboutModal.classList.remove('active'));
+
+  window.addEventListener('click', (e) => {
+    if (e.target === helpModal) helpModal.classList.remove('active');
+    if (e.target === aboutModal) aboutModal.classList.remove('active');
+    if (e.target === installModal) installModal.classList.remove('active');
+  });
+
+  let loadedImage = null;
+  let loadedPdf = null;
+  let pdfCurrentPage = 1;
+  let pdfTotalPages = 1;
+  let originalWidth = 0;
+  let originalHeight = 0;
+  let fileName = 'converted-document';
+
+  tabUpload.addEventListener('click', () => {
+    tabUpload.classList.add('active');
+    tabGDoc.classList.remove('active');
+    dropZone.style.display = 'block';
+    gdocBox.classList.remove('active');
+  });
+
+  tabGDoc.addEventListener('click', () => {
+    tabGDoc.classList.add('active');
+    tabUpload.classList.remove('active');
+    dropZone.style.display = 'none';
+    gdocBox.classList.add('active');
+  });
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleFile(e.target.files[0]); });
+
+  qualityInput.addEventListener('input', (e) => qualityVal.textContent = e.target.value);
+
+  function handleFile(file) {
+    fileName = file.name.substring(0, file.name.lastIndexOf('.')) || 'converted';
+    pdfControls.classList.remove('active');
+    loadedImage = null;
+    loadedPdf = null;
+
+    const ext = file.name.split('.').pop().toLowerCase();
+
+    if (file.type === 'application/pdf') {
+      processPDF(file);
+    } else if (file.type.startsWith('image/')) {
+      processImage(file);
+    } else if (ext === 'docx') {
+      processDOCX(file);
+    } else if (ext === 'txt') {
+      processTXT(file);
+    } else {
+      alert('Unsupported file type. Please upload an Image, PDF, DOCX, or TXT file.');
+    }
+  }
+
+  function processImage(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        loadedImage = img;
+        originalWidth = img.width;
+        originalHeight = img.height;
+        widthInput.value = img.width;
+        heightInput.value = img.height;
+
+        renderCanvas(img.width, img.height, (ctx) => {
+          ctx.drawImage(img, 0, 0);
+        });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function processDOCX(file) {
+    if (typeof mammoth === 'undefined') {
+      alert('DOCX processing library unavailable.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      mammoth.convertToHtml({ arrayBuffer: e.target.result })
+        .then((result) => {
+          renderTextOrHtmlToCanvas(result.value);
+        })
+        .catch((err) => alert('Error reading DOCX file: ' + err.message));
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function processTXT(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      renderTextOrHtmlToCanvas(`<pre style="font-family:sans-serif;">${e.target.result}</pre>`);
+    };
+    reader.readAsText(file);
+  }
+
+  function renderTextOrHtmlToCanvas(htmlContent) {
+    const canvasWidth = 800;
+    const canvasHeight = 1000;
+    originalWidth = canvasWidth;
+    originalHeight = canvasHeight;
+    widthInput.value = canvasWidth;
+    heightInput.value = canvasHeight;
+
+    const svgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${canvasWidth}" height="${canvasHeight}">
+        <foreignObject width="100%" height="100%">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: sans-serif; padding: 40px; background: white; height: 100%; box-sizing: border-box; color: #1e293b; font-size: 16px; line-height: 1.5;">
+            ${htmlContent}
+          </div>
+        </foreignObject>
+      </svg>
+    `;
+
+    const img = new Image();
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+
+    img.onload = () => {
+      renderCanvas(canvasWidth, canvasHeight, (ctx) => {
+        ctx.drawImage(img, 0, 0);
+      });
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  }
+
+  function processPDF(file) {
+    if (typeof pdfjsLib === 'undefined') {
+      alert('PDF processing library unavailable.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async function() {
+      try {
+        const typedarray = new Uint8Array(this.result);
+        loadedPdf = await pdfjsLib.getDocument(typedarray).promise;
+        pdfTotalPages = loadedPdf.numPages;
+        pdfCurrentPage = 1;
+        
+        pdfControls.classList.add('active');
+        renderPdfPage(pdfCurrentPage);
+      } catch(err) {
+        alert('Failed to parse PDF document.');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  async function renderPdfPage(pageNo) {
+    pageNumDisplay.textContent = `Page ${pageNo} of ${pdfTotalPages}`;
+    const page = await loadedPdf.getPage(pageNo);
+    const viewport = page.getViewport({ scale: 2.0 });
+
+    originalWidth = Math.round(viewport.width);
+    originalHeight = Math.round(viewport.height);
+    widthInput.value = originalWidth;
+    heightInput.value = originalHeight;
+
+    previewCanvas.width = originalWidth;
+    previewCanvas.height = originalHeight;
+    const ctx = previewCanvas.getContext('2d');
+
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+    
+    placeholderText.style.display = 'none';
+    previewCanvas.style.display = 'block';
+    downloadBtn.disabled = false;
+  }
+
+  prevPageBtn.addEventListener('click', () => {
+    if (loadedPdf && pdfCurrentPage > 1) {
+      pdfCurrentPage--;
+      renderPdfPage(pdfCurrentPage);
+    }
+  });
+  nextPageBtn.addEventListener('click', () => {
+    if (loadedPdf && pdfCurrentPage < pdfTotalPages) {
+      pdfCurrentPage++;
+      renderPdfPage(pdfCurrentPage);
+    }
+  });
+
+  parseGDocBtn.addEventListener('click', () => {
+    const url = gdocUrlInput.value.trim();
+    const docIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+
+    if (!docIdMatch || !docIdMatch[1]) {
+      alert('Invalid Google Doc URL. Please make sure it follows the format: https://docs.google.com/document/d/YOUR_DOC_ID/edit');
+      return;
+    }
+
+    const docId = docIdMatch[1];
+    
+    docIframe.src = `https://docs.google.com/document/d/${docId}/preview`;
+    webviewWrapper.style.display = 'block';
+
+    gdocDownloadLinks.innerHTML = `
+      <p style="font-weight:600; font-size:0.9rem;">Direct Download / Export Links:</p>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=pdf" target="_blank">Download as PDF (.pdf)</a>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=docx" target="_blank">Download as Word (.docx)</a>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=txt" target="_blank">Download as Text (.txt)</a>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=odt" target="_blank">Download as OpenDocument (.odt)</a>
+    `;
+  });
+
+  function renderCanvas(width, height, drawCallback) {
+    previewCanvas.width = width;
+    previewCanvas.height = height;
+    const ctx = previewCanvas.getContext('2d');
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, width, height);
+    
+    drawCallback(ctx);
+
+    placeholderText.style.display = 'none';
+    previewCanvas.style.display = 'block';
+    downloadBtn.disabled = false;
+  }
+
+  downloadBtn.addEventListener('click', () => {
+    const targetFormat = formatSelect.value;
+    const quality = parseFloat(qualityInput.value) / 100;
+    
+    const targetWidth = parseInt(widthInput.value) || originalWidth;
+    const targetHeight = parseInt(heightInput.value) || originalHeight;
+
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = targetWidth;
+    exportCanvas.height = targetHeight;
+    const ctx = exportCanvas.getContext('2d');
+
+    if (targetFormat === 'image/jpeg' || targetFormat === 'image/bmp') {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, targetWidth, targetHeight);
+    }
+
+    ctx.drawImage(previewCanvas, 0, 0, targetWidth, targetHeight);
+
+    const extensionMap = {
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/webp': 'webp',
+      'image/bmp': 'bmp'
+    };
+
+    const mimeType = targetFormat;
+    const fileUrl = exportCanvas.toDataURL(mimeType, quality);
+
+    const downloadLink = document.createElement('a');
+    const suffix = loadedPdf ? `-page${pdfCurrentPage}` : '';
+    downloadLink.download = `${fileName}${suffix}.${extensionMap[mimeType]}`;
+    downloadLink.href = fileUrl;
+    downloadLink.click();
+  });
+</script>
+
+</body>
+</html>

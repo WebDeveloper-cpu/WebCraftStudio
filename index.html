@@ -70,6 +70,22 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        .guide-btn {
+            background-color: transparent;
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .guide-btn:hover {
+            background-color: #38bdf8;
+            color: #0f172a;
+        }
+
         /* Customize PWABuilder Web Component Button */
         pwa-install {
             --install-button-color: #10b981;
@@ -149,6 +165,87 @@
             font-size: 0.9rem;
         }
 
+        /* Instructions Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 1.75rem;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            color: #0f172a;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .browser-guide {
+            margin-bottom: 1.25rem;
+        }
+
+        .browser-guide h3 {
+            font-size: 1rem;
+            color: #2563eb;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .browser-guide ol {
+            padding-left: 1.25rem;
+            font-size: 0.88rem;
+            color: #475569;
+        }
+
+        .browser-guide li {
+            margin-bottom: 0.2rem;
+        }
+
         footer {
             text-align: center;
             padding: 1.5rem;
@@ -179,6 +276,8 @@
                 installbuttontext="📲 Add to Screen" 
                 description="Access WebCraftStudio web apps directly from your home screen.">
             </pwa-install>
+
+            <button class="guide-btn" id="openGuideBtn">❓ How to install manually</button>
         </div>
     </header>
 
@@ -196,7 +295,7 @@
                         <span class="tag">JavaScript</span>
                     </div>
                 </div>
-                <a href="#" class="btn">Launch App</a>
+                <a href="currency_calculator.html" class="btn">Launch App</a>
             </article>
 
             <article class="card" data-title="file converter utility document">
@@ -208,31 +307,76 @@
                         <span class="tag">JS Engine</span>
                     </div>
                 </div>
-                <a href="#" class="btn">Launch App</a>
+                <a href="file_converter.html" class="btn">Launch App</a>
             </article>
 
-            <article class="card" data-title="news reader feed dashboard">
-                <div>
-                    <h2>News Center</h2>
-                    <p>Clean news reader dashboard featuring instant category filters and reader view.</p>
-                    <div class="tags">
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS Flexbox</span>
-                    </div>
-                </div>
-                <a href="#" class="btn">Launch App</a>
-            </article>
 
         </div>
     </main>
+
+    <!-- Instructions Modal -->
+    <div class="modal-overlay" id="guideModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add to Home Screen Instructions</h2>
+                <button class="close-modal" id="closeGuideBtn">&times;</button>
+            </div>
+            
+            <div class="browser-guide">
+                <h3>🌐 Google Chrome (Android & Desktop)</h3>
+                <ol>
+                    <li>Tap the <strong>three dots</strong> (⋮) in the top-right corner.</li>
+                    <li>Select <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li>
+                    <li>Confirm by clicking or tapping <strong>Add</strong>.</li>
+                </ol>
+            </div>
+
+            <div class="browser-guide">
+                <h3>🧭 Apple Safari (iOS & iPadOS)</h3>
+                <ol>
+                    <li>Tap the <strong>Share</strong> button (square with an upward arrow) at the bottom.</li>
+                    <li>Scroll down the action sheet and select <strong>Add to Home Screen</strong>.</li>
+                    <li>Tap <strong>Add</strong> in the top-right corner.</li>
+                </ol>
+            </div>
+
+            <div class="browser-guide">
+                <h3>🦊 Mozilla Firefox (Android)</h3>
+                <ol>
+                    <li>Tap the <strong>three dots</strong> (⋮) next to the URL bar.</li>
+                    <li>Tap <strong>Install</strong> or <strong>Add to Home screen</strong>.</li>
+                    <li>Confirm the prompt.</li>
+                </ol>
+            </div>
+
+            <div class="browser-guide">
+                <h3>🌊 Microsoft Edge (Mobile & Desktop)</h3>
+                <ol>
+                    <li>Tap/click the <strong>three dots</strong> (...) menu button.</li>
+                    <li>Choose <strong>Add to phone</strong> (Mobile) or <strong>Apps > Install WebCraftStudio</strong> (Desktop).</li>
+                    <li>Confirm installation.</li>
+                </ol>
+            </div>
+
+            <div class="browser-guide">
+                <h3>🔴 Opera Mini / Opera (Android)</h3>
+                <ol>
+                    <li>Tap the <strong>Opera icon</strong> or three dots menu in the browser bar.</li>
+                    <li>Select <strong>Home screen</strong> or tap <strong>+ Add to</strong>.</li>
+                    <li>Choose <strong>Add to Home screen</strong>.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2026 WebCraftStudio. Built with standard HTML, CSS, and JavaScript.</p>
     </footer>
 
-    <!-- Search Logic -->
+    <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Search Filtering
             const searchInput = document.getElementById('searchInput');
             const projectCards = document.querySelectorAll('#projectGrid .card');
 
@@ -249,6 +393,25 @@
                         card.classList.add('hidden');
                     }
                 });
+            });
+
+            // Modal Logic
+            const guideModal = document.getElementById('guideModal');
+            const openGuideBtn = document.getElementById('openGuideBtn');
+            const closeGuideBtn = document.getElementById('closeGuideBtn');
+
+            openGuideBtn.addEventListener('click', () => {
+                guideModal.classList.add('active');
+            });
+
+            closeGuideBtn.addEventListener('click', () => {
+                guideModal.classList.remove('active');
+            });
+
+            guideModal.addEventListener('click', (e) => {
+                if (e.target === guideModal) {
+                    guideModal.classList.remove('active');
+                }
             });
         });
     </script>
