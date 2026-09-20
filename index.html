@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebCraftStudio | Web Applications Showcase</title>
+    
+    <!-- PWA Manifest & Mobile Config -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="WebCraft">
+
+    <style>
+        /* Base Reset & Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header & Hero */
+        header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #ffffff;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Add to Home Screen Button */
+        .install-btn {
+            background-color: #10b981;
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            transition: background 0.2s ease, transform 0.2s ease;
+            display: none; /* Hidden until browser triggers install prompt */
+        }
+
+        .install-btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* iOS Fallback Banner */
+        .ios-banner {
+            display: none;
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Main Showcase Container */
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* App Cards */
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            background-color: #e2e8f0;
+            color: #334155;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .btn {
+            display: inline-block;
+            text-align: center;
+            background-color: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #0f172a;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>WebCraftStudio</h1>
+        <p>A collection of lightweight, responsive web applications and interactive utility tools.</p>
+        
+        <div class="header-actions">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search projects...">
+            <button id="installBtn" class="install-btn">📲 Add to Home Screen</button>
+            <div id="iosBanner" class="ios-banner">
+                Tap <strong>Share</strong> (bottom bar) and select <strong>"Add to Home Screen"</strong> 📲
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main>
+        <div class="grid" id="projectGrid">
+            
+            <article class="card" data-title="calculator exchange convert currency">
+                <div>
+                    <h2>Currency Calculator</h2>
+                    <p>A fast, responsive web application for real-time exchange rates and quick conversions.</p>
+                    <div class="tags">
+                        <span class="tag">HTML</span>
+                        <span class="tag">CSS</span>
+                        <span class="tag">JavaScript</span>
+                    </div>
+                </div>
+                <a href="#" class="btn">Launch App</a>
+            </article>
+
+            <article class="card" data-title="file converter utility document">
+                <div>
+                    <h2>File Converter</h2>
+                    <p>Browser-based document utility tool for quick file adjustments and transformations.</p>
+                    <div class="tags">
+                        <span class="tag">HTML</span>
+                        <span class="tag">JS Engine</span>
+                    </div>
+                </div>
+                <a href="#" class="btn">Launch App</a>
+            </article>
+
+            <article class="card" data-title="news reader feed dashboard">
+                <div>
+                    <h2>News Center</h2>
+                    <p>Clean news reader dashboard featuring instant category filters and reader view.</p>
+                    <div class="tags">
+                        <span class="tag">HTML</span>
+                        <span class="tag">CSS Flexbox</span>
+                    </div>
+                </div>
+                <a href="#" class="btn">Launch App</a>
+            </article>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 WebCraftStudio. Built with standard HTML, CSS, and JavaScript.</p>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        // 1. App Search Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const projectCards = document.querySelectorAll('#projectGrid .card');
+
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+
+                projectCards.forEach(card => {
+                    const cardData = card.getAttribute('data-title').toLowerCase();
+                    const cardTitle = card.querySelector('h2').textContent.toLowerCase();
+                    
+                    if (cardData.includes(searchTerm) || cardTitle.includes(searchTerm)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // 2. Add to Home Screen (PWA Installation) Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+        const iosBanner = document.getElementById('iosBanner');
+
+        // Check for Android / Chrome / Edge installation event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block'; // Show the install button
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // Hide install button when app is already installed
+        window.addEventListener('appinstalled', () => {
+            installBtn.style.display = 'none';
+        });
+
+        // Detect iOS devices (Safari does not support beforeinstallprompt)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+        if (isIOS && !isStandalone) {
+            iosBanner.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
