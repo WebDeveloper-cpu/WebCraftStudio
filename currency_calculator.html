@@ -8,7 +8,50 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Currency Calculator">
 
-  <title>Currency Calculator</title>
+  <!-- Primary SEO Meta Tags -->
+  <title>Exchange Currency Calculator - Live Rates, Investment & Loan EMI</title>
+  <meta name="title" content="Exchange Currency Calculator - Live Rates, Investment & Loan EMI">
+  <meta name="description" content="Free online financial suite: Convert African & global currencies, crypto (BTC, USDT), calculate investment growth, and estimate loan EMI payments in real time.">
+  <meta name="keywords" content="currency calculator, exchange rates, live currency converter, naira to usd, investment calculator, EMI calculator, loan repayment, crypto rates, FreeGiftTech">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="FreeGiftTech">
+  <link rel="canonical" href="https://webdeveloper-cpu.github.io/WebCraftStudio/currency_calculator.html">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://webdeveloper-cpu.github.io/WebCraftStudio/currency_calculator.html">
+  <meta property="og:title" content="Exchange Currency Calculator - Live Rates & Financial Tools">
+  <meta property="og:description" content="Convert fiat and crypto currencies live, project investment returns, and calculate loan EMI installments effortlessly.">
+  <meta property="og:image" content="https://webdeveloper-cpu.github.io/WebCraftStudio/assets/og-image.jpg">
+
+  <!-- Twitter Card -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://webdeveloper-cpu.github.io/WebCraftStudio/currency_calculator.html">
+  <meta property="twitter:title" content="Exchange Currency Calculator - Live Rates & Financial Tools">
+  <meta property="twitter:description" content="Convert fiat and crypto currencies live, project investment returns, and calculate loan EMI installments effortlessly.">
+  <meta property="twitter:image" content="https://webdeveloper-cpu.github.io/WebCraftStudio/assets/og-image.jpg">
+
+  <!-- Structured Data (JSON-LD) for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Exchange Currency Calculator",
+    "url": "https://webdeveloper-cpu.github.io/WebCraftStudio/currency_calculator.html",
+    "description": "Comprehensive financial suite providing live exchange rate conversion, investment growth forecasting, and loan EMI calculation.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "author": {
+      "@type": "Organization",
+      "name": "FreeGiftTech"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
 
   <style>
     :root {
@@ -166,8 +209,10 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
-    .info-banner strong {
+    .info-banner h2 {
+      font-size: 0.95rem;
       color: var(--text-color);
+      margin-bottom: 2px;
     }
 
     /* Offline banner */
@@ -603,10 +648,10 @@
 
   <header class="header">
     <div class="header-main">
-      <div class="app-title" id="app-title">Currency Calculator</div>
+      <h1 class="app-title" id="app-title">Currency Calculator</h1>
 
       <div class="header-actions">
-        <a href="index.html" class="header-btn">🏠 Home</a>
+        <a href="index.html" class="header-btn" title="Home">🏠 Home</a>
         <button type="button" class="header-btn" onclick="shareApp()">🔗 Share</button>
         <button type="button" class="header-btn" onclick="openModal('add-home-modal')">📱 Install App</button>
         <button type="button" class="header-btn" onclick="openModal('help-modal')">Help</button>
@@ -620,10 +665,10 @@
 
   <main>
 
-    <div class="info-banner">
-      <strong>Currency Exchange Hub</strong><br>
-      Convert currencies using live exchange-rate data, estimate investment growth, and calculate loan payments.
-    </div>
+    <section class="info-banner">
+      <h2>Currency Exchange Hub</h2>
+      Convert currencies using live exchange-rate data, estimate investment growth, and calculate loan payments seamlessly.
+    </section>
 
     <!-- Offline indicator -->
     <div id="offline-banner" class="offline-banner">
@@ -631,7 +676,7 @@
     </div>
 
     <!-- Currency Tab -->
-    <section id="currency" class="tab-content active">
+    <section id="currency" class="tab-content active" aria-label="Currency Exchange Section">
       <div class="card">
         <div class="form-group">
           <label for="cur-amount">Amount</label>
@@ -641,7 +686,7 @@
         <div class="grid-2">
           <div class="form-group">
             <label for="cur-from">From</label>
-            <select id="cur-from" onchange="saveInputs()">
+            <select id="cur-from" onchange="saveInputs()" aria-label="Source Currency">
               <optgroup label="Major African Currencies">
                 <option value="NGN">Nigeria - Naira (₦)</option>
                 <option value="ZAR">South Africa - Rand (R)</option>
@@ -679,7 +724,7 @@
 
           <div class="form-group">
             <label for="cur-to">To</label>
-            <select id="cur-to" onchange="saveInputs()">
+            <select id="cur-to" onchange="saveInputs()" aria-label="Target Currency">
               <optgroup label="Major African Currencies">
                 <option value="NGN" selected>Nigeria - Naira (₦)</option>
                 <option value="ZAR">South Africa - Rand (R)</option>
@@ -743,7 +788,7 @@
     </section>
 
     <!-- Investment Tab -->
-    <section id="investment" class="tab-content">
+    <section id="investment" class="tab-content" aria-label="Investment Growth Calculator">
       <div class="card">
         <div class="form-group">
           <label for="inv-principal">Starting Principal</label>
@@ -783,7 +828,7 @@
     </section>
 
     <!-- Loan Tab -->
-    <section id="loan" class="tab-content">
+    <section id="loan" class="tab-content" aria-label="Loan EMI Calculator">
       <div class="card">
         <div class="form-group">
           <label for="loan-amount">Loan Amount</label>
@@ -881,7 +926,7 @@
     </div>
   </div>
 
-  <!-- ===== UPDATED HELP MODAL ===== -->
+  <!-- ===== HELP MODAL ===== -->
   <div id="help-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'help-modal')">
     <div class="modal">
       <div class="modal-header">
@@ -926,7 +971,7 @@
     </div>
   </div>
 
-  <!-- ===== UPDATED ABOUT MODAL ===== -->
+  <!-- ===== ABOUT MODAL ===== -->
   <div id="about-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'about-modal')">
     <div class="modal">
       <div class="modal-header">
@@ -1303,7 +1348,7 @@
       const section = document.getElementById(tabId);
       const button = document.getElementById(`tab-btn-${tabId}`);
       if (section) section.classList.add("active");
-      if (button) button.classList.apply ? button.classList.add("active") : null;
+      if (button) button.classList.add("active");
 
       const title = document.getElementById("app-title");
       if (tabId === "currency") title.textContent = "Calculate Currency Exchange";

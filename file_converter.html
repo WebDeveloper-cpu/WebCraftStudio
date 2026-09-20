@@ -4,10 +4,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>File Converter</title>
-  <meta name="description" content="Convert images, Word DOCX, PDFs, and Google Docs directly in your browser. Fast, free, and secure client-side file conversion tool." />
+  <!-- Primary SEO Meta Tags -->
+  <title>Free Online File & Document Converter | PDF, Images, Word & Google Docs</title>
+  <meta name="description" content="Convert images, Word DOCX, PDFs, and Google Docs directly in your browser. Fast, free, secure, and privacy-focused client-side file conversion tool." />
+  <meta name="keywords" content="file converter, online PDF converter, convert DOCX to image, PDF to PNG, Google Docs exporter, client-side file conversion, browser file converter" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://webdeveloper-cpu.github.io/WebCraftStudio/file_converter.html" />
 
-  <!-- Security: Content Security Policy (CSP) updated for external affiliate & ad links -->
+  <!-- Open Graph / Facebook / WhatsApp SEO -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://webdeveloper-cpu.github.io/WebCraftStudio/file_converter.html" />
+  <meta property="og:title" content="Free Online File & Document Converter | PDF, Images & Word" />
+  <meta property="og:description" content="Convert images, Word DOCX, PDFs, and Google Docs directly in your browser. Fast, free, secure client-side file conversion." />
+  <meta property="og:site_name" content="File Converter" />
+
+  <!-- Twitter Card SEO -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Online File & Document Converter | Browser Utility" />
+  <meta name="twitter:description" content="Convert images, Word DOCX, PDFs, and Google Docs directly in your browser without uploading files to remote servers." />
+
+  <!-- Structured Data (JSON-LD Schema) for Web Application -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "File Converter Utility",
+    "url": "https://webdeveloper-cpu.github.io/WebCraftStudio/file_converter.html",
+    "description": "Browser-based client-side utility to convert images, PDF documents, DOCX files, and export Google Docs without server uploads.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Client-side local conversion",
+      "PDF to Image Conversion (PNG, JPG, WEBP, BMP)",
+      "DOCX and TXT rendering",
+      "Google Doc Link parsing & direct download generation"
+    ]
+  }
+  </script>
+
+  <!-- Security: Content Security Policy (CSP) -->
   <meta http-equiv="Content-Security-Policy" 
         content="default-src 'self' data: blob: https://cdnjs.cloudflare.com https://docs.google.com https://www.hostafrica.ng https://app.gotechafrica.com https://app.getcleva.com https://monetag.com https://omg10.com; 
                  style-src 'self' 'unsafe-inline'; 
@@ -259,6 +299,38 @@
     }
     .gdoc-link-btn:hover { background: #c7d2fe; }
 
+    /* SEO Information Article Content Section */
+    .seo-content-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-top: 2rem;
+    }
+    .seo-content-section h2 {
+      font-size: 1.25rem;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .seo-content-section h3 {
+      font-size: 1.05rem;
+      color: var(--primary);
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .seo-content-section p, .seo-content-section ul {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .seo-content-section ul {
+      margin-left: 1.25rem;
+      margin-top: 0.5rem;
+    }
+    .seo-content-section li {
+      margin-bottom: 0.35rem;
+    }
+
     /* Modal Overlay and Content Styles */
     .modal-overlay {
       display: none;
@@ -372,11 +444,11 @@
   </header>
 
   <div class="tabs" role="tablist">
-    <button class="tab-btn active" id="tabUpload" role="tab">Upload File (Image/PDF/Docx)</button>
-    <button class="tab-btn" id="tabGDoc" role="tab">Google Doc URL</button>
+    <button class="tab-btn active" id="tabUpload" role="tab" aria-selected="true">Upload File (Image/PDF/Docx)</button>
+    <button class="tab-btn" id="tabGDoc" role="tab" aria-selected="false">Google Doc URL</button>
   </div>
 
-  <section class="drop-zone" id="dropZone">
+  <section class="drop-zone" id="dropZone" aria-label="File Upload Drop Area">
     <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color: var(--primary)" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"></path>
     </svg>
@@ -463,6 +535,20 @@
     </div>
   </section>
 
+  <!-- SEO Optimization Content Section -->
+  <article class="seo-content-section" aria-label="About Online File Conversion">
+    <h2>Secure, Client-Side File & Document Conversion</h2>
+    <p>Our browser-based file conversion utility offers fast, free, and completely private document processing. Unlike standard online converters that transmit your files to remote servers, all conversions take place directly within your device's browser memory.</p>
+    
+    <h3>Key Features & Capabilities:</h3>
+    <ul>
+      <li><strong>PDF to Image Processing:</strong> Render individual pages from PDF documents into high-resolution PNG, JPEG, WEBP, or BMP format.</li>
+      <li><strong>Word Document (DOCX) Conversion:</strong> Convert Microsoft Word documents into versatile web images or inspect document visual previews on the fly.</li>
+      <li><strong>Google Docs Exporter:</strong> Parse public Google Doc web links to download documents in PDF, DOCX, TXT, or OpenDocument (ODT) formats.</li>
+      <li><strong>Privacy First:</strong> Your confidential data never leaves your device. No file size tracking or server storage risks involved.</li>
+    </ul>
+  </article>
+
   <!-- Install App Modal -->
   <div class="modal-overlay" id="installModal" role="dialog" aria-modal="true" aria-labelledby="installModalTitle">
     <div class="modal-card">
@@ -519,7 +605,7 @@
       </div>
       <h2>Content Locked</h2>
       <p>Please click the button below and view the ad to continue using File Converter.</p>
-      <a href="#" class="locker-btn" id="lockerAdLink" target="_blank">View Ad to Continue &rarr;</a>
+      <a href="#" class="locker-btn" id="lockerAdLink" target="_blank" rel="noopener">View Ad to Continue &rarr;</a>
     </div>
   </div>
 
@@ -661,23 +747,23 @@
     lockerTimers.forEach(t => clearTimeout(t));
     lockerTimers = [];
 
-    // Lock 1: 20 seconds (20,000 ms)
+    // Lock 1: 60 seconds
     lockerTimers.push(setTimeout(() => {
       currentLockStep = 0;
       showScreenLocker(lockAds[0]);
     }, 60000));
 
-    // Lock 2: 60 seconds (60,000 ms)
+    // Lock 2: 120 seconds
     lockerTimers.push(setTimeout(() => {
       currentLockStep = 1;
       showScreenLocker(lockAds[1]);
     }, 120000));
 
-    // Lock 3: 90 seconds / 1 min 30s (90,000 ms)
+    // Lock 3: 180 seconds
     lockerTimers.push(setTimeout(() => {
       currentLockStep = 2;
       showScreenLocker(lockAds[2]);
-      // Restart cycle loop after 90s lock completes
+      // Restart cycle loop after 180s lock completes
       setTimeout(startLockerSequence, 1000);
     }, 180000));
   }
@@ -795,14 +881,18 @@
 
   tabUpload.addEventListener('click', () => {
     tabUpload.classList.add('active');
+    tabUpload.setAttribute('aria-selected', 'true');
     tabGDoc.classList.remove('active');
+    tabGDoc.setAttribute('aria-selected', 'false');
     dropZone.style.display = 'block';
     gdocBox.classList.remove('active');
   });
 
   tabGDoc.addEventListener('click', () => {
     tabGDoc.classList.add('active');
+    tabGDoc.setAttribute('aria-selected', 'true');
     tabUpload.classList.remove('active');
+    tabUpload.setAttribute('aria-selected', 'false');
     dropZone.style.display = 'none';
     gdocBox.classList.add('active');
   });
@@ -987,10 +1077,10 @@
 
     gdocDownloadLinks.innerHTML = `
       <p style="font-weight:600; font-size:0.9rem;">Direct Download / Export Links:</p>
-      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=pdf" target="_blank">Download as PDF (.pdf)</a>
-      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=docx" target="_blank">Download as Word (.docx)</a>
-      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=txt" target="_blank">Download as Text (.txt)</a>
-      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=odt" target="_blank">Download as OpenDocument (.odt)</a>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=pdf" target="_blank" rel="noopener">Download as PDF (.pdf)</a>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=docx" target="_blank" rel="noopener">Download as Word (.docx)</a>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=txt" target="_blank" rel="noopener">Download as Text (.txt)</a>
+      <a class="gdoc-link-btn" href="https://docs.google.com/document/d/${docId}/export?format=odt" target="_blank" rel="noopener">Download as OpenDocument (.odt)</a>
     `;
   });
 

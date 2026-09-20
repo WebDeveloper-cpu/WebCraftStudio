@@ -3,16 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebCraftStudio | Web Applications Showcase</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>WebCraftStudio | Free Responsive Web Applications & Online Tools</title>
+    <meta name="title" content="WebCraftStudio | Free Responsive Web Applications & Online Tools">
+    <meta name="description" content="Explore WebCraftStudio's showcase of fast, lightweight, and responsive web applications including currency calculators, file converters, and web developer tools.">
+    <meta name="keywords" content="web applications, currency calculator, online file converter, lightweight web apps, PWA showcase, developer utilities, web tools">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="WebCraftStudio">
+    <link rel="canonical" href="https://webcraftstudio.com/">
 
-    <!-- Mobile Metadata -->
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://webcraftstudio.com/">
+    <meta property="og:title" content="WebCraftStudio | Free Responsive Web Applications & Online Tools">
+    <meta property="og:description" content="Explore WebCraftStudio's showcase of fast, lightweight, and responsive web applications including currency calculators, file converters, and developer utilities.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630">
+
+    <!-- Twitter Cards -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://webcraftstudio.com/">
+    <meta property="twitter:title" content="WebCraftStudio | Free Responsive Web Applications & Online Tools">
+    <meta property="twitter:description" content="Explore WebCraftStudio's showcase of fast, lightweight, and responsive web applications including currency calculators, file converters, and developer utilities.">
+    <meta property="twitter:image" content="https://via.placeholder.com/1200x630">
+
+    <!-- Mobile & PWA Metadata -->
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="WebCraft">
 
+    <!-- Preconnect CDNs for performance -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
     <!-- Open Source Add-to-Screen Component (PWABuilder CDN) -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/@pwabuilder/pwainstall"></script>
+
+    <!-- Schema.org JSON-LD Structured Data for Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "WebCraftStudio",
+      "url": "https://webcraftstudio.com/",
+      "description": "A showcase of lightweight, responsive web applications and interactive utility tools.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://webcraftstudio.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Currency Calculator",
+            "operatingSystem": "All",
+            "applicationCategory": "FinanceApplication",
+            "url": "https://webcraftstudio.com/currency_calculator.html",
+            "description": "A fast, responsive web application for real-time exchange rates and quick conversions."
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "File Converter",
+            "operatingSystem": "All",
+            "applicationCategory": "UtilitiesApplication",
+            "url": "https://webcraftstudio.com/file_converter.html",
+            "description": "Browser-based document utility tool for quick file adjustments and transformations."
+          }
+        }
+      ]
+    }
+    </script>
 
     <style>
         /* Base Reset & Layout */
@@ -264,10 +339,11 @@
     <!-- Header Section -->
     <header>
         <h1>WebCraftStudio</h1>
-        <p>A collection of lightweight, responsive web applications and interactive utility tools.</p>
+        <p>A showcase of fast, lightweight, responsive web applications and interactive utility tools.</p>
         
         <div class="header-actions">
-            <input type="text" id="searchInput" class="search-bar" placeholder="Search projects...">
+            <label for="searchInput" class="hidden">Search web applications</label>
+            <input type="search" id="searchInput" class="search-bar" placeholder="Search web apps..." aria-label="Search web applications">
             
             <!-- Open Source Web Component for Add to Screen -->
             <pwa-install 
@@ -277,49 +353,50 @@
                 description="Access WebCraftStudio web apps directly from your home screen.">
             </pwa-install>
 
-            <button class="guide-btn" id="openGuideBtn">❓ How to install manually</button>
+            <button class="guide-btn" id="openGuideBtn" aria-haspopup="dialog">❓ How to install manually</button>
         </div>
     </header>
 
     <!-- Main Content Grid -->
     <main>
-        <div class="grid" id="projectGrid">
-            
-            <article class="card" data-title="calculator exchange convert currency">
-                <div>
-                    <h2>Currency Calculator</h2>
-                    <p>A fast, responsive web application for real-time exchange rates and quick conversions.</p>
-                    <div class="tags">
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS</span>
-                        <span class="tag">JavaScript</span>
+        <section aria-label="Web Application Directory">
+            <div class="grid" id="projectGrid">
+                
+                <article class="card" data-title="calculator exchange convert currency forex rates">
+                    <div>
+                        <h2>Currency Calculator</h2>
+                        <p>A fast, responsive web application for real-time exchange rates and quick conversions.</p>
+                        <div class="tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
+                        </div>
                     </div>
-                </div>
-                <a href="currency_calculator.html" class="btn">Launch App</a>
-            </article>
+                    <a href="currency_calculator.html" class="btn" title="Launch Currency Calculator App">Launch App</a>
+                </article>
 
-            <article class="card" data-title="file converter utility document">
-                <div>
-                    <h2>File Converter</h2>
-                    <p>Browser-based document utility tool for quick file adjustments and transformations.</p>
-                    <div class="tags">
-                        <span class="tag">HTML</span>
-                        <span class="tag">JS Engine</span>
+                <article class="card" data-title="file converter utility document format transform">
+                    <div>
+                        <h2>File Converter</h2>
+                        <p>Browser-based document utility tool for quick file adjustments and transformations.</p>
+                        <div class="tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">JS Engine</span>
+                        </div>
                     </div>
-                </div>
-                <a href="file_converter.html" class="btn">Launch App</a>
-            </article>
+                    <a href="file_converter.html" class="btn" title="Launch File Converter App">Launch App</a>
+                </article>
 
-
-        </div>
+            </div>
+        </section>
     </main>
 
     <!-- Instructions Modal -->
-    <div class="modal-overlay" id="guideModal">
+    <div class="modal-overlay" id="guideModal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add to Home Screen Instructions</h2>
-                <button class="close-modal" id="closeGuideBtn">&times;</button>
+                <h2 id="modalTitle">Add to Home Screen Instructions</h2>
+                <button class="close-modal" id="closeGuideBtn" aria-label="Close installation guide">&times;</button>
             </div>
             
             <div class="browser-guide">
@@ -370,7 +447,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 WebCraftStudio. Built with standard HTML, CSS, and JavaScript.</p>
+        <p>&copy; 2026 WebCraftStudio. All rights reserved. Built with standard HTML, CSS, and JavaScript.</p>
     </footer>
 
     <!-- Scripts -->
@@ -395,22 +472,33 @@
                 });
             });
 
-            // Modal Logic
+            // Modal Accessibility & Logic
             const guideModal = document.getElementById('guideModal');
             const openGuideBtn = document.getElementById('openGuideBtn');
             const closeGuideBtn = document.getElementById('closeGuideBtn');
 
-            openGuideBtn.addEventListener('click', () => {
+            const openModal = () => {
                 guideModal.classList.add('active');
-            });
+                guideModal.setAttribute('aria-hidden', 'false');
+            };
 
-            closeGuideBtn.addEventListener('click', () => {
+            const closeModal = () => {
                 guideModal.classList.remove('active');
-            });
+                guideModal.setAttribute('aria-hidden', 'true');
+            };
+
+            openGuideBtn.addEventListener('click', openModal);
+            closeGuideBtn.addEventListener('click', closeModal);
 
             guideModal.addEventListener('click', (e) => {
                 if (e.target === guideModal) {
-                    guideModal.classList.remove('active');
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && guideModal.classList.contains('active')) {
+                    closeModal();
                 }
             });
         });
