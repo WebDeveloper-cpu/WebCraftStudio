@@ -249,9 +249,10 @@
       display: block;
     }
 
-    /* Inline Sponsored Ads */
-    .inline-ad-container {
+    /* Rotating Sponsored Ads Container */
+    .rotating-ad-wrapper {
       margin: 16px 0;
+      position: relative;
     }
 
     .ad-label {
@@ -266,16 +267,31 @@
       gap: 6px;
     }
 
+    .ad-container {
+      position: relative;
+      min-height: 110px;
+    }
+
     .ad-banner {
-      display: block;
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
       background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #fff;
       border-radius: 12px;
       padding: 14px 16px;
       text-decoration: none;
       box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: opacity 0.5s ease-in-out, transform 0.2s;
+      opacity: 0;
+    }
+
+    .ad-banner.active {
+      display: block;
       position: relative;
+      opacity: 1;
     }
 
     .ad-banner:active {
@@ -322,6 +338,7 @@
     .ad-banner.ad-3 { background: linear-gradient(135deg, #ea580c, #c2410c); }
     .ad-banner.ad-4 { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
     .ad-banner.ad-5 { background: linear-gradient(135deg, #db2777, #be185d); }
+    .ad-banner.ad-6 { background: linear-gradient(135deg, #0284c7, #0f172a); }
 
     /* Tabs */
     .tab-content {
@@ -591,51 +608,6 @@
       color: var(--text-color);
     }
 
-    /* Screen Locker Modal Specifics */
-    .locker-modal {
-      text-align: center;
-      padding: 30px 20px;
-    }
-
-    .locker-icon {
-      font-size: 3.5rem;
-      margin-bottom: 12px;
-    }
-
-    .locker-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--text-color);
-      margin-bottom: 8px;
-    }
-
-    .locker-desc {
-      font-size: 0.9rem;
-      color: var(--label-color);
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .locker-btn {
-      display: inline-block;
-      width: 100%;
-      padding: 14px 20px;
-      background: #0284c7;
-      color: #ffffff;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-      cursor: pointer;
-      border: none;
-    }
-
-    .locker-btn:active {
-      transform: scale(0.98);
-      background: #0369a1;
-    }
-
     @media (max-width: 430px) {
       main { padding: 12px; }
       .card { padding: 16px; }
@@ -770,19 +742,41 @@
           </div>
         </div>
 
-        <!-- Inline Sponsored Ads above Convert Live button -->
-        <div class="inline-ad-container">
+        <!-- Rotating Sponsored Ad Banner - Currency Section -->
+        <div class="rotating-ad-wrapper">
           <div class="ad-label">Sponsored</div>
-          <a class="ad-banner ad-1" href="https://monetag.com/?ref_id=zUg8" target="_blank" rel="noopener noreferrer sponsored">
-            <div class="ad-title">Turn Your Traffic Into Cash 💰</div>
-            <div class="ad-desc">Monetag pays weekly from just $5. Clean ads, high CPMs, zero minimum traffic.</div>
-            <span class="ad-cta">Start Earning Now</span>
-          </a>
-          <a class="ad-banner ad-2" style="margin-top: 8px;" href="https://t.deriv.link?t=9LES59QKZERG" target="_blank" rel="noopener noreferrer sponsored">
-            <div class="ad-title">Trade 24/7 – Markets Never Sleep 📈</div>
-            <div class="ad-desc">Forex, crypto, stocks & derived indices. Start with as little as $5 on Deriv.</div>
-            <span class="ad-cta">Open Free Account</span>
-          </a>
+          <div class="ad-container">
+            <a class="ad-banner ad-1 active" href="https://monetag.com/?ref_id=zUg8" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Turn Your Traffic Into Cash 💰</div>
+              <div class="ad-desc">Monetag pays weekly from just $5. Clean ads, high CPMs, zero minimum traffic.</div>
+              <span class="ad-cta">Start Earning Now</span>
+            </a>
+            <a class="ad-banner ad-2" href="https://t.deriv.link?t=9LES59QKZERG" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Trade 24/7 – Markets Never Sleep 📈</div>
+              <div class="ad-desc">Forex, crypto, stocks & derived indices. Start with as little as $5 on Deriv.</div>
+              <span class="ad-cta">Open Free Account</span>
+            </a>
+            <a class="ad-banner ad-3" href="https://app.getcleva.com/refer/CHUK6191" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Receive USD. Send Money Instantly 💵</div>
+              <div class="ad-desc">Open a USD account, get paid globally & transfer across Africa at best rates.</div>
+              <span class="ad-cta">Join Cleva Free</span>
+            </a>
+            <a class="ad-banner ad-4" href="https://app.gotechafrica.com/go-invite?mref=7936" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Tech is the New Oil 🚀</div>
+              <div class="ad-desc">Learn high-income tech skills online. Affordable courses + real job opportunities.</div>
+              <span class="ad-cta">Start Learning Free</span>
+            </a>
+            <a class="ad-banner ad-5" href="https://my.hostafrica.com/aff.php?aff=3440" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">HOSTAFRICA Cloud & Web Hosting 🌐</div>
+              <div class="ad-desc">Fast, reliable African hosting. Free domains, SSL certificates & 24/7 support.</div>
+              <span class="ad-cta">Get Started</span>
+            </a>
+            <a class="ad-banner ad-6" href="https://omg10.com/4/9797691" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Discover Top Offers & Rewards 🎁</div>
+              <div class="ad-desc">Explore exclusive deals, top rewards, and special online offers today!</div>
+              <span class="ad-cta">Explore Offers</span>
+            </a>
+          </div>
         </div>
 
         <button type="button" class="btn" id="currency-btn" onclick="convertCurrency()">Convert Live</button>
@@ -812,19 +806,41 @@
           <input type="text" inputmode="decimal" id="inv-years" value="5" autocomplete="off" oninput="formatInput(this); saveInputs();">
         </div>
 
-        <!-- Inline Sponsored Ads above Calculate Future Value button -->
-        <div class="inline-ad-container">
+        <!-- Rotating Sponsored Ad Banner - Investment Section -->
+        <div class="rotating-ad-wrapper">
           <div class="ad-label">Sponsored</div>
-          <a class="ad-banner ad-3" href="https://app.getcleva.com/refer/CHUK6191" target="_blank" rel="noopener noreferrer sponsored">
-            <div class="ad-title">Receive USD. Send Money Instantly 💵</div>
-            <div class="ad-desc">Open a USD account, get paid globally & transfer across Africa at best rates.</div>
-            <span class="ad-cta">Join Cleva Free</span>
-          </a>
-          <a class="ad-banner ad-4" style="margin-top: 8px;" href="https://app.gotechafrica.com/go-invite?mref=7936" target="_blank" rel="noopener noreferrer sponsored">
-            <div class="ad-title">Tech is the New Oil 🚀</div>
-            <div class="ad-desc">Learn high-income tech skills online. Affordable courses + real job opportunities.</div>
-            <span class="ad-cta">Start Learning Free</span>
-          </a>
+          <div class="ad-container">
+            <a class="ad-banner ad-1 active" href="https://monetag.com/?ref_id=zUg8" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Turn Your Traffic Into Cash 💰</div>
+              <div class="ad-desc">Monetag pays weekly from just $5. Clean ads, high CPMs, zero minimum traffic.</div>
+              <span class="ad-cta">Start Earning Now</span>
+            </a>
+            <a class="ad-banner ad-2" href="https://t.deriv.link?t=9LES59QKZERG" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Trade 24/7 – Markets Never Sleep 📈</div>
+              <div class="ad-desc">Forex, crypto, stocks & derived indices. Start with as little as $5 on Deriv.</div>
+              <span class="ad-cta">Open Free Account</span>
+            </a>
+            <a class="ad-banner ad-3" href="https://app.getcleva.com/refer/CHUK6191" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Receive USD. Send Money Instantly 💵</div>
+              <div class="ad-desc">Open a USD account, get paid globally & transfer across Africa at best rates.</div>
+              <span class="ad-cta">Join Cleva Free</span>
+            </a>
+            <a class="ad-banner ad-4" href="https://app.gotechafrica.com/go-invite?mref=7936" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Tech is the New Oil 🚀</div>
+              <div class="ad-desc">Learn high-income tech skills online. Affordable courses + real job opportunities.</div>
+              <span class="ad-cta">Start Learning Free</span>
+            </a>
+            <a class="ad-banner ad-5" href="https://my.hostafrica.com/aff.php?aff=3440" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">HOSTAFRICA Cloud & Web Hosting 🌐</div>
+              <div class="ad-desc">Fast, reliable African hosting. Free domains, SSL certificates & 24/7 support.</div>
+              <span class="ad-cta">Get Started</span>
+            </a>
+            <a class="ad-banner ad-6" href="https://omg10.com/4/9797691" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Discover Top Offers & Rewards 🎁</div>
+              <div class="ad-desc">Explore exclusive deals, top rewards, and special online offers today!</div>
+              <span class="ad-cta">Explore Offers</span>
+            </a>
+          </div>
         </div>
 
         <button type="button" class="btn" onclick="calculateInvestment()">Calculate Future Value</button>
@@ -852,14 +868,41 @@
           <input type="text" inputmode="decimal" id="loan-months" value="12" autocomplete="off" oninput="formatInput(this); saveInputs();">
         </div>
 
-        <!-- Inline Sponsored Ad above Calculate Monthly Payment button -->
-        <div class="inline-ad-container">
+        <!-- Rotating Sponsored Ad Banner - Loan Section -->
+        <div class="rotating-ad-wrapper">
           <div class="ad-label">Sponsored</div>
-          <a class="ad-banner ad-5" href="https://my.hostafrica.com/aff.php?aff=3440" target="_blank" rel="noopener noreferrer sponsored">
-            <div class="ad-title">HOSTAFRICA Cloud & Web Hosting 🌐</div>
-            <div class="ad-desc">Fast, reliable African hosting. Free domains, SSL certificates & 24/7 support.</div>
-            <span class="ad-cta">Get Started</span>
-          </a>
+          <div class="ad-container">
+            <a class="ad-banner ad-1 active" href="https://monetag.com/?ref_id=zUg8" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Turn Your Traffic Into Cash 💰</div>
+              <div class="ad-desc">Monetag pays weekly from just $5. Clean ads, high CPMs, zero minimum traffic.</div>
+              <span class="ad-cta">Start Earning Now</span>
+            </a>
+            <a class="ad-banner ad-2" href="https://t.deriv.link?t=9LES59QKZERG" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Trade 24/7 – Markets Never Sleep 📈</div>
+              <div class="ad-desc">Forex, crypto, stocks & derived indices. Start with as little as $5 on Deriv.</div>
+              <span class="ad-cta">Open Free Account</span>
+            </a>
+            <a class="ad-banner ad-3" href="https://app.getcleva.com/refer/CHUK6191" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Receive USD. Send Money Instantly 💵</div>
+              <div class="ad-desc">Open a USD account, get paid globally & transfer across Africa at best rates.</div>
+              <span class="ad-cta">Join Cleva Free</span>
+            </a>
+            <a class="ad-banner ad-4" href="https://app.gotechafrica.com/go-invite?mref=7936" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Tech is the New Oil 🚀</div>
+              <div class="ad-desc">Learn high-income tech skills online. Affordable courses + real job opportunities.</div>
+              <span class="ad-cta">Start Learning Free</span>
+            </a>
+            <a class="ad-banner ad-5" href="https://my.hostafrica.com/aff.php?aff=3440" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">HOSTAFRICA Cloud & Web Hosting 🌐</div>
+              <div class="ad-desc">Fast, reliable African hosting. Free domains, SSL certificates & 24/7 support.</div>
+              <span class="ad-cta">Get Started</span>
+            </a>
+            <a class="ad-banner ad-6" href="https://omg10.com/4/9797691" target="_blank" rel="noopener noreferrer sponsored">
+              <div class="ad-title">Discover Top Offers & Rewards 🎁</div>
+              <div class="ad-desc">Explore exclusive deals, top rewards, and special online offers today!</div>
+              <span class="ad-cta">Explore Offers</span>
+            </a>
+          </div>
         </div>
 
         <button type="button" class="btn" onclick="calculateLoan()">Calculate Monthly Payment</button>
@@ -1020,16 +1063,6 @@
     </div>
   </div>
 
-  <!-- ===== SCREEN LOCKER MODAL ===== -->
-  <div id="screen-locker-modal" class="modal-overlay">
-    <div class="modal locker-modal">
-      <div class="locker-icon">🔒</div>
-      <div class="locker-title">View Ad to Continue</div>
-      <div class="locker-desc">To keep this app free, please view a quick sponsored advertisement to unlock the screen.</div>
-      <button type="button" class="locker-btn" id="locker-ad-link" onclick="handleAdUnlock()">View Ad to Unlock</button>
-    </div>
-  </div>
-
   <script>
     const cryptoMapping = {
       BTC: "bitcoin",
@@ -1067,47 +1100,21 @@
       });
     }
 
-    /* ===== Screen Locker Ads Logic ===== */
-    const lockerAds = [
-      "https://omg10.com/4/9797691",
-      "https://omg10.com/4/9312448",
-      "https://omg10.com/4/9390162"
-    ];
-
-    let currentLockerAdUrl = "";
-
-    function triggerScreenLocker(adUrl) {
-      currentLockerAdUrl = adUrl;
-      const lockerModal = document.getElementById("screen-locker-modal");
-      if (lockerModal) {
-        lockerModal.classList.add("visible");
-        document.body.style.overflow = "hidden";
-      }
-    }
-
-    function handleAdUnlock() {
-      if (currentLockerAdUrl) {
-        window.open(currentLockerAdUrl, "_blank");
-      }
-      const lockerModal = document.getElementById("screen-locker-modal");
-      if (lockerModal) {
-        lockerModal.classList.remove("visible");
-        document.body.style.overflow = "";
-      }
-    }
-
-    function initScreenLockerTimers() {
-      setTimeout(() => {
-        triggerScreenLocker(lockerAds[0]);
-      }, 60000);
-
-      setTimeout(() => {
-        triggerScreenLocker(lockerAds[1]);
-      }, 120000);
-
-      setTimeout(() => {
-        triggerScreenLocker(lockerAds[2]);
-      }, 180000);
+    /* ===== Ad Rotation Logic (15 seconds) ===== */
+    function initAdRotation() {
+      const adContainers = document.querySelectorAll('.ad-container');
+      
+      adContainers.forEach(container => {
+        const banners = container.querySelectorAll('.ad-banner');
+        if (banners.length <= 1) return;
+        
+        let currentIndex = 0;
+        setInterval(() => {
+          banners[currentIndex].classList.remove('active');
+          currentIndex = (currentIndex + 1) % banners.length;
+          banners[currentIndex].classList.add('active');
+        }, 15000);
+      });
     }
 
     /* ===== Modal Functions ===== */
@@ -1442,7 +1449,7 @@
       calculateInvestment();
       calculateLoan();
       updateOnlineStatus();
-      initScreenLockerTimers();
+      initAdRotation();
     });
   </script>
   

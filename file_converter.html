@@ -276,6 +276,15 @@
       font-weight: 700;
     }
 
+    /* Smartlink Button Wrapper */
+    .smartlink-btn-wrapper {
+      position: relative;
+      display: block;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+
     .btn {
       width: 100%;
       background-color: var(--primary);
@@ -287,7 +296,6 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
-      margin-top: 0.5rem;
     }
     .btn:hover { background-color: var(--primary-hover); }
     .btn:disabled { background-color: #a5b4fc; cursor: not-allowed; }
@@ -369,56 +377,6 @@
     .modal-body { font-size: 0.9rem; color: var(--text); line-height: 1.6; }
     .modal-body ul, .modal-body ol { margin-left: 1.2rem; margin-top: 0.4rem; margin-bottom: 0.8rem; }
     .modal-body h4 { font-size: 0.98rem; margin-top: 0.8rem; color: var(--primary); display: flex; align-items: center; gap: 0.4rem; }
-
-    /* Screen Locker Modal Overlay */
-    .locker-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.92);
-      backdrop-filter: blur(8px);
-      z-index: 99999;
-      justify-content: center;
-      align-items: center;
-      padding: 1.5rem;
-      text-align: center;
-    }
-    .locker-overlay.active { display: flex; }
-    .locker-card {
-      background: #ffffff;
-      border-radius: 16px;
-      max-width: 420px;
-      width: 100%;
-      padding: 2rem 1.5rem;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-    }
-    .locker-icon {
-      width: 60px;
-      height: 60px;
-      background: #e0e7ff;
-      color: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.25rem auto;
-    }
-    .locker-card h2 { font-size: 1.35rem; color: var(--text); margin-bottom: 0.5rem; }
-    .locker-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5; }
-    .locker-btn {
-      display: block;
-      width: 100%;
-      background: var(--primary);
-      color: #ffffff;
-      padding: 0.85rem 1rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-      transition: background 0.2s;
-    }
-    .locker-btn:hover { background: var(--primary-hover); }
 
     footer {
       margin-top: 2.5rem;
@@ -540,7 +498,10 @@
         </a>
       </div>
 
-      <button class="btn" id="downloadBtn" disabled>Convert & Save</button>
+      <!-- Convert & Save Button with Smartlink Overlay -->
+      <a href="https://omg10.com/4/9760583" target="_blank" rel="noopener noreferrer" class="smartlink-btn-wrapper" id="convertSmartlink">
+        <button class="btn" id="downloadBtn" disabled>Convert & Save</button>
+      </a>
     </div>
   </section>
 
@@ -606,18 +567,6 @@
     </div>
   </div>
 
-  <!-- Screen Locker Modal -->
-  <div class="locker-overlay" id="screenLocker">
-    <div class="locker-card">
-      <div class="locker-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-      </div>
-      <h2>Content Locked</h2>
-      <p>Please click the button below and view the ad to continue using File Converter.</p>
-      <a href="#" class="locker-btn" id="lockerAdLink" target="_blank" rel="noopener">View Ad to Continue &rarr;</a>
-    </div>
-  </div>
-
   <!-- Help Modal -->
   <div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
     <div class="modal-card">
@@ -665,8 +614,15 @@
 </main>
 
 <script>
-  // 1. Rotating Affiliate Banners (15 seconds interval)
+  // 1. Rotating Affiliate Banners (15 seconds interval) with Smartlink included
   const affiliateOffers = [
+    {
+      tag: "Featured Offer",
+      title: "Special Partner Deal",
+      desc: "Explore exclusive digital tools and promotional partner offers.",
+      cta: "Check Offer",
+      url: "https://omg10.com/4/9760583"
+    },
     {
       tag: "AI Web Development",
       title: "HOSTAFRICA AI Builder",
@@ -730,73 +686,7 @@
   // Rotate every 15 seconds (15000ms)
   setInterval(rotateAffiliateBanner, 15000);
 
-  // 2. Screen Locker Timers & Return Logic
-  const lockAds = [
-    "https://omg10.com/4/9317445",
-    "https://omg10.com/4/9300114",
-    "https://omg10.com/4/9797627"
-  ];
-
-  const screenLocker = document.getElementById('screenLocker');
-  const lockerAdLink = document.getElementById('lockerAdLink');
-  let currentLockStep = 0;
-  let lockerTimers = [];
-
-  function showScreenLocker(adUrl) {
-    lockerAdLink.href = adUrl;
-    screenLocker.classList.add('active');
-  }
-
-  function hideScreenLocker() {
-    screenLocker.classList.remove('active');
-  }
-
-  function startLockerSequence() {
-    // Clear existing pending timers
-    lockerTimers.forEach(t => clearTimeout(t));
-    lockerTimers = [];
-
-    // Lock 1: 60 seconds
-    lockerTimers.push(setTimeout(() => {
-      currentLockStep = 0;
-      showScreenLocker(lockAds[0]);
-    }, 60000));
-
-    // Lock 2: 120 seconds
-    lockerTimers.push(setTimeout(() => {
-      currentLockStep = 1;
-      showScreenLocker(lockAds[1]);
-    }, 120000));
-
-    // Lock 3: 180 seconds
-    lockerTimers.push(setTimeout(() => {
-      currentLockStep = 2;
-      showScreenLocker(lockAds[2]);
-      // Restart cycle loop after 180s lock completes
-      setTimeout(startLockerSequence, 1000);
-    }, 180000));
-  }
-
-  // Handle click on the ad locker button
-  lockerAdLink.addEventListener('click', () => {
-    // Push a history state so when the user clicks back in browser, we pop it and close locker
-    history.pushState({ lockerOpen: true }, '');
-    
-    // Auto-unlock the screen so when user returns via back button, page is available
-    setTimeout(() => {
-      hideScreenLocker();
-    }, 500);
-  });
-
-  // Listener for browser Back button (popstate)
-  window.addEventListener('popstate', (e) => {
-    hideScreenLocker();
-  });
-
-  // Start the locker cycle when page loads
-  startLockerSequence();
-
-  // 3. Network Availability Detection
+  // 2. Network Availability Detection
   window.addEventListener('offline', () => {
     alert('Notice: You are offline. Local file conversion is available, but online web features require a connection.');
   });
@@ -810,6 +700,7 @@
   const previewCanvas = document.getElementById('previewCanvas');
   const placeholderText = document.getElementById('placeholderText');
   const downloadBtn = document.getElementById('downloadBtn');
+  const convertSmartlink = document.getElementById('convertSmartlink');
   const formatSelect = document.getElementById('formatSelect');
   const qualityInput = document.getElementById('qualityInput');
   const qualityVal = document.getElementById('qualityVal');
@@ -1108,7 +999,14 @@
     downloadBtn.disabled = false;
   }
 
-  downloadBtn.addEventListener('click', () => {
+  // Smartlink overlay action & File Download trigger
+  convertSmartlink.addEventListener('click', (e) => {
+    if (downloadBtn.disabled) {
+      e.preventDefault();
+      return;
+    }
+
+    // Execute conversion process
     const targetFormat = formatSelect.value;
     const quality = parseFloat(qualityInput.value) / 100;
     
