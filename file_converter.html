@@ -400,6 +400,7 @@
       <a href="index.html" class="nav-btn">🏠 Home</a>
       <button class="nav-btn" id="navShareBtn">🔗 Share</button>
       <button class="nav-btn nav-btn-highlight" id="navInstallBtn">📲 Install App</button>
+      <button class="nav-btn" id="navIphoneBtn">📱 iOS Default Browser</button>
       <button class="nav-btn" id="navHelpBtn">Help</button>
       <button class="nav-btn" id="navAboutBtn">About</button>
     </div>
@@ -567,6 +568,33 @@
     </div>
   </div>
 
+  <!-- iPhone / iOS Default Browser Setup Modal -->
+  <div class="modal-overlay" id="iphoneModal" role="dialog" aria-modal="true" aria-labelledby="iphoneModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="iphoneModalTitle">Open in Safari / Default Browser (iPhone)</h3>
+        <button class="modal-close" id="closeIphoneBtn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>In-app browsers (like Facebook, Instagram, or Telegram) can restrict file downloading and conversions. Here is how to open or set Safari as your default browser on iOS:</p>
+
+        <h4>📱 Open Current Page in Safari</h4>
+        <ol>
+          <li>Tap the <strong>three-dots icon (...)</strong> or <strong>Share icon</strong> (square with arrow up) at the bottom or top corner of your screen.</li>
+          <li>Tap <strong>"Open in Safari"</strong> or <strong>"Open in Browser"</strong>.</li>
+        </ol>
+
+        <h4>⚙️ Set Safari (or Chrome) as Default Browser in iOS Settings</h4>
+        <ol>
+          <li>Open the <strong>Settings app</strong> on your iPhone or iPad.</li>
+          <li>Scroll down and select <strong>Safari</strong> (or <strong>Chrome</strong>).</li>
+          <li>Tap <strong>Default Browser App</strong>.</li>
+          <li>Select <strong>Safari</strong> or your preferred browser app.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
   <!-- Help Modal -->
   <div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
     <div class="modal-card">
@@ -614,6 +642,19 @@
 </main>
 
 <script>
+  // 0. Automatic Redirect for Android In-App WebViews to System Browser
+  (function redirectToAndroidDefaultBrowser() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isAndroid = /android/i.test(ua);
+    const isInAppWebView = /FBAN|FBAV|Instagram|TikTok|Line|MicroMessenger|Snapchat|Twitter/i.test(ua);
+
+    if (isAndroid && isInAppWebView) {
+      const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+      // Intent URL scheme to force opening in Android default web browser (e.g. Chrome)
+      window.location.href = `intent://${currentUrl}#Intent;scheme=https;package=com.android.chrome;end;`;
+    }
+  })();
+
   // 1. Rotating Affiliate Banners (15 seconds interval) with Smartlink included
   const affiliateOffers = [
     {
@@ -724,14 +765,17 @@
   // Navigation & Modal Elements
   const navShareBtn = document.getElementById('navShareBtn');
   const navInstallBtn = document.getElementById('navInstallBtn');
+  const navIphoneBtn = document.getElementById('navIphoneBtn');
   const navHelpBtn = document.getElementById('navHelpBtn');
   const navAboutBtn = document.getElementById('navAboutBtn');
   const helpModal = document.getElementById('helpModal');
   const aboutModal = document.getElementById('aboutModal');
   const installModal = document.getElementById('installModal');
+  const iphoneModal = document.getElementById('iphoneModal');
   const closeHelpBtn = document.getElementById('closeHelpBtn');
   const closeAboutBtn = document.getElementById('closeAboutBtn');
   const closeInstallBtn = document.getElementById('closeInstallBtn');
+  const closeIphoneBtn = document.getElementById('closeIphoneBtn');
 
   // Share functionality
   const shareUrl = 'https://webdeveloper-cpu.github.io/WebCraftStudio/file_converter.html';
@@ -758,10 +802,12 @@
   });
 
   navInstallBtn.addEventListener('click', () => installModal.classList.add('active'));
+  navIphoneBtn.addEventListener('click', () => iphoneModal.classList.add('active'));
   navHelpBtn.addEventListener('click', () => helpModal.classList.add('active'));
   navAboutBtn.addEventListener('click', () => aboutModal.classList.add('active'));
 
   closeInstallBtn.addEventListener('click', () => installModal.classList.remove('active'));
+  closeIphoneBtn.addEventListener('click', () => iphoneModal.classList.remove('active'));
   closeHelpBtn.addEventListener('click', () => helpModal.classList.remove('active'));
   closeAboutBtn.addEventListener('click', () => aboutModal.classList.remove('active'));
 
@@ -769,6 +815,7 @@
     if (e.target === helpModal) helpModal.classList.remove('active');
     if (e.target === aboutModal) aboutModal.classList.remove('active');
     if (e.target === installModal) installModal.classList.remove('active');
+    if (e.target === iphoneModal) iphoneModal.classList.remove('active');
   });
 
   let loadedImage = null;
