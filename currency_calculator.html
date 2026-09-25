@@ -1140,6 +1140,31 @@
       USDT: "tether"
     };
 
+    /* ===== Monetag Smartlink Rotation List ===== */
+    const smartlinks = [
+      "https://omg10.com/4/9317445",
+      "https://omg10.com/4/9300114",
+      "https://omg10.com/4/9797627",
+      "https://omg10.com/4/9319730",
+      "https://omg10.com/4/9797691",
+      "https://omg10.com/4/9312449",
+      "https://omg10.com/4/9653889",
+      "https://omg10.com/4/9312448",
+      "https://omg10.com/4/9291146",
+      "https://omg10.com/4/9390162",
+      "https://omg10.com/4/9797599",
+      "https://omg10.com/4/9797624",
+      "https://omg10.com/4/9797693",
+      "https://omg10.com/4/9795846",
+      "https://omg10.com/4/9797602",
+      "https://omg10.com/4/9761298",
+      "https://omg10.com/4/9320201",
+      "https://omg10.com/4/9753115",
+      "https://omg10.com/4/9761291",
+      "https://omg10.com/4/9760583"
+    ];
+    let currentSmartlinkIndex = 0;
+
     const STORAGE_KEY = "currency_exchange_hub_data";
     const THEME_KEY = "currency_exchange_hub_theme";
     const SHARE_URL = "https://webdeveloper-cpu.github.io/WebCraftStudio/currency_calculator.html";
@@ -1292,7 +1317,7 @@
       }
     }
 
-    /* ===== Currency Converter with Smartlink Overlay ===== */
+    /* ===== Currency Converter with Rotating Smartlink Overlay ===== */
     async function convertCurrency() {
       const amount = parseInputValue("cur-amount");
       const from = document.getElementById("cur-from").value;
@@ -1314,11 +1339,12 @@
         return;
       }
 
-      // Set Smartlink URL in iFrame overlay
-      const smartlinkUrl = "https://omg10.com/4/9797691";
-      if (smartlinkFrame && smartlinkFrame.src !== smartlinkUrl) {
-        smartlinkFrame.src = smartlinkUrl;
+      // Rotate through smartlinks array sequentially
+      const currentUrl = smartlinks[currentSmartlinkIndex];
+      if (smartlinkFrame) {
+        smartlinkFrame.src = currentUrl;
       }
+      currentSmartlinkIndex = (currentSmartlinkIndex + 1) % smartlinks.length;
 
       // Display initial loading state
       button.classList.add("loading");
