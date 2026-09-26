@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniCalc Pro - Integrated Frame Server</title>
+  <title>OmniCalc Pro - Offline Engine</title>
 
   <!-- Web App Manifest -->
   <link rel="manifest" href="data:application/manifest+json,{
@@ -73,6 +73,37 @@
       color: var(--text-muted);
       font-size: 0.8rem;
       margin-top: 2px;
+      margin-bottom: 12px;
+    }
+
+    /* Top Navigation Toolbar */
+    .top-nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--border-color);
+      color: var(--primary);
     }
 
     .mode-switch {
@@ -123,6 +154,7 @@
       justify-content: center;
       align-items: center;
       gap: 6px;
+      text-decoration: none;
     }
 
     .action-btn:hover {
@@ -293,31 +325,124 @@
       height: 220px;
     }
 
-    /* Unified iFrame & Result Viewer Container */
+    /* Result Display */
     .unified-viewer {
       margin-top: 16px;
       background-color: var(--panel-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     .result-display-header {
       background-color: #1e293b;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 14px 16px;
       color: var(--success);
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      text-align: center;
     }
 
-    .iframe-window {
+    /* Modal Overlay Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 280px;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      max-width: 500px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: transparent;
       border: none;
-      background-color: #ffffff;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: var(--danger);
+    }
+
+    .modal-body {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    .modal-body h4 {
+      color: var(--warning);
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+
+    .modal-body ul {
+      margin-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    /* Promotional Links Section */
+    .promo-section {
+      margin-top: 20px;
+      background-color: var(--panel-bg);
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .promo-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--warning);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .promo-btn {
+      font-size: 0.75rem;
+      padding: 8px 10px;
+      text-align: center;
     }
   </style>
 </head>
@@ -325,8 +450,16 @@
 
   <div class="app-container">
     <header>
-      <h1>OmniCalc Pro Server Engine</h1>
-      <p>Interactive SmartLink & Embedded iFrame Results Viewer</p>
+      <h1>OmniCalc Pro Engine</h1>
+      <p>Multi-Functional Offline Computation System</p>
+      
+      <!-- Action Toolbar -->
+      <div class="top-nav">
+        <a href="index.html" class="nav-btn">🏠 Home</a>
+        <button class="nav-btn" onclick="shareApp()">🔗 Share</button>
+        <button class="nav-btn" onclick="toggleModal('helpModal', true)">❓ Help</button>
+        <button class="nav-btn" onclick="toggleModal('aboutModal', true)">ℹ️ About</button>
+      </div>
     </header>
 
     <div class="mode-switch">
@@ -398,15 +531,15 @@
     <div id="panel-sqrt" class="panel">
       <div class="grid-2">
         <div class="input-group">
-          <label for="sqrt-val">Value / Radicand ($x$)</label>
+          <label for="sqrt-val">Value / Radicand (x)</label>
           <input type="text" id="sqrt-val" value="144" placeholder="Enter number" oninput="formatInputComma(this)">
         </div>
         <div class="input-group">
-          <label for="sqrt-degree">Root Degree ($n$th root)</label>
+          <label for="sqrt-degree">Root Degree (nth root)</label>
           <input type="text" id="sqrt-degree" value="2" placeholder="2 for √, 3 for ∛" oninput="formatInputComma(this)">
         </div>
       </div>
-      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeSqrt)">⚡ Calculate Root</button>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="computeSqrt()">⚡ Calculate Root</button>
     </div>
 
     <!-- 3. Roman Numeral Converter -->
@@ -416,8 +549,8 @@
         <input type="text" id="roman-input" value="2026" placeholder="e.g. 2026 or MMXXVI">
       </div>
       <div class="grid-2">
-        <button class="action-btn" onclick="triggerAction(() => computeRoman('toRoman'))">⚡ Convert Number to Roman</button>
-        <button class="action-btn accent" onclick="triggerAction(() => computeRoman('toDec'))">⚡ Convert Roman to Number</button>
+        <button class="action-btn" onclick="computeRoman('toRoman')">⚡ Convert Number to Roman</button>
+        <button class="action-btn accent" onclick="computeRoman('toDec')">⚡ Convert Roman to Number</button>
       </div>
     </div>
 
@@ -441,7 +574,7 @@
           <input type="text" id="pct-y" value="200" placeholder="Value Y" oninput="formatInputComma(this)">
         </div>
       </div>
-      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computePercentage)">⚡ Calculate Percentage</button>
+      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="computePercentage()">⚡ Calculate Percentage</button>
     </div>
 
     <!-- 5. Advanced Statistics Engine -->
@@ -450,7 +583,7 @@
         <label for="stats-input">Dataset Values (Comma Separated)</label>
         <textarea id="stats-input" rows="3" style="margin-top: 4px;">10, 20, 20, 30, 40, 50, 60, 70, 80</textarea>
       </div>
-      <button class="action-btn primary" style="width: 100%; margin-top: 8px;" onclick="triggerAction(calcFullStats)">⚡ Compute Comprehensive Statistics</button>
+      <button class="action-btn primary" style="width: 100%; margin-top: 8px;" onclick="calcFullStats()">⚡ Compute Comprehensive Statistics</button>
     </div>
 
     <!-- 6. Longitude & Latitude GPS Engine -->
@@ -475,7 +608,7 @@
           <input type="text" id="geo-lon2" value="3.3958" placeholder="e.g. 3.3958">
         </div>
       </div>
-      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeGeo)">⚡ Calculate Distance & Bearing</button>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="computeGeo()">⚡ Calculate Distance & Bearing</button>
     </div>
 
     <!-- 7. Angles & Trigonometry Unit Engine -->
@@ -502,7 +635,7 @@
           </select>
         </div>
       </div>
-      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeAngle)">⚡ Convert Angle & Trig Metrics</button>
+      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="computeAngle()">⚡ Convert Angle & Trig Metrics</button>
     </div>
 
     <!-- 8. Binary & Base 10 Calculator -->
@@ -522,7 +655,7 @@
           </select>
         </div>
       </div>
-      <button class="action-btn primary" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeBase)">⚡ Convert & Process Base</button>
+      <button class="action-btn primary" style="width: 100%; margin-bottom: 8px;" onclick="computeBase()">⚡ Convert & Process Base</button>
     </div>
 
     <!-- 9. Speed & Velocity Engine -->
@@ -542,7 +675,7 @@
         </div>
       </div>
       <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">* Fill any 2 values to compute the missing third variable.</p>
-      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeVelocity)">⚡ Calculate Velocity / Distance</button>
+      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="computeVelocity()">⚡ Calculate Velocity / Distance</button>
     </div>
 
     <!-- 10. Dedicated Temperature Converter -->
@@ -571,7 +704,7 @@
           </select>
         </div>
       </div>
-      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeTemperature)">⚡ Convert Temperature</button>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="computeTemperature()">⚡ Convert Temperature</button>
     </div>
 
     <!-- 11. Calculus Engine -->
@@ -594,7 +727,7 @@
           <input type="text" id="calc-x" value="1" placeholder="Point x for f'(x)" oninput="formatInputComma(this)">
         </div>
       </div>
-      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeCalculus)">⚡ Compute Calculus</button>
+      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="computeCalculus()">⚡ Compute Calculus</button>
     </div>
 
     <!-- 12. Financial Math -->
@@ -613,7 +746,7 @@
           <input type="text" id="fin-t" value="3" placeholder="Time in Years" oninput="formatInputComma(this)">
         </div>
       </div>
-      <button class="action-btn primary" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeFinance)">⚡ Calculate Loan & Growth</button>
+      <button class="action-btn primary" style="width: 100%; margin-bottom: 8px;" onclick="computeFinance()">⚡ Calculate Loan & Growth</button>
     </div>
 
     <!-- 13. Vector Math -->
@@ -628,7 +761,7 @@
           <input type="text" id="vec-b" value="4, 5, 6" placeholder="Vector B (x, y, z)">
         </div>
       </div>
-      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeVectors)">⚡ Process Vectors</button>
+      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="computeVectors()">⚡ Process Vectors</button>
     </div>
 
     <!-- 14. Polynomial Solver -->
@@ -647,7 +780,7 @@
           <input type="text" id="poly-c" value="6" placeholder="c" oninput="formatInputComma(this)">
         </div>
       </div>
-      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(solveQuadratic)">⚡ Solve Equation</button>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="solveQuadratic()">⚡ Solve Equation</button>
     </div>
 
     <!-- 15. Converter Mathematics Panel -->
@@ -675,7 +808,7 @@
         <label for="conv-value">Value to Convert</label>
         <input type="text" id="conv-value" value="1,000" placeholder="Enter Amount" oninput="formatInputComma(this)">
       </div>
-      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeConversion)">⚡ Convert Unit</button>
+      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="computeConversion()">⚡ Convert Unit</button>
     </div>
 
     <!-- 16. Graphing Panel -->
@@ -685,7 +818,7 @@
           <label for="graph-expr">Graph Equation f(x)</label>
           <input type="text" id="graph-expr" value="sin(x)" placeholder="e.g. x^2 - 4 or sin(x)">
         </div>
-        <button class="action-btn primary" style="flex: 0 0 110px; align-self: flex-end;" onclick="triggerAction(renderGraph)">⚡ Plot</button>
+        <button class="action-btn primary" style="flex: 0 0 110px; align-self: flex-end;" onclick="renderGraph()">⚡ Plot</button>
       </div>
       <canvas id="graphCanvas"></canvas>
     </div>
@@ -702,17 +835,102 @@
       <div class="history-list" id="history-container"></div>
     </div>
 
-    <!-- Unified Display Output (Output Result & Embedded iFrame SmartLink Panel) -->
+    <!-- Unified Display Output -->
     <div class="unified-viewer">
       <div class="result-display-header" id="calc-result-header">
         Result: Ready for computation
       </div>
-      <iframe class="iframe-window" id="smartlink-iframe" src="about:blank"></iframe>
+    </div>
+
+    <!-- Featured Resources & Offers Section (Monetag Placement) -->
+    <div class="promo-section">
+      <div class="promo-title">✨ Recommended Tools & Offers</div>
+      <div class="promo-grid">
+        <a href="https://omg10.com/4/9317445" target="_blank" class="action-btn promo-btn">🔥 Offer 1</a>
+        <a href="https://omg10.com/4/9300114" target="_blank" class="action-btn promo-btn primary">🚀 Offer 2</a>
+        <a href="https://omg10.com/4/9797627" target="_blank" class="action-btn promo-btn accent">⚡ Offer 3</a>
+        <a href="https://omg10.com/4/9319730" target="_blank" class="action-btn promo-btn warning">💎 Offer 4</a>
+        <a href="https://omg10.com/4/9797691" target="_blank" class="action-btn promo-btn">🌟 Offer 5</a>
+      </div>
     </div>
 
   </div>
 
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal-overlay" onclick="handleModalClick(event, 'helpModal')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>❓ How to Use OmniCalc Pro</h2>
+        <button class="modal-close" onclick="toggleModal('helpModal', false)">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4>Navigation</h4>
+        <p>Use the top scrollable menu to switch between 17 different specialized modules.</p>
+        
+        <h4>Modes & Modules</h4>
+        <ul>
+          <li><strong>Scientific:</strong> Standard arithmetic and trigonometric operations.</li>
+          <li><strong>Calculus:</strong> Numerical derivatives f'(x) and definite integrals ∫.</li>
+          <li><strong>Graphing:</strong> Enter continuous functions in terms of x to render plots.</li>
+          <li><strong>Phone DB:</strong> Logs all calculations locally to your browser/device.</li>
+        </ul>
+
+        <h4>Data Persistence</h4>
+        <p>All calculations are auto-saved to LocalStorage. You can export history into a <code>.txt</code> file via the Phone DB panel.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="aboutModal" class="modal-overlay" onclick="handleModalClick(event, 'aboutModal')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>ℹ️ About OmniCalc Pro</h2>
+        <button class="modal-close" onclick="toggleModal('aboutModal', false)">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>OmniCalc Pro Engine</strong> is an offline mathematical computational toolkit designed for Web and Mobile WebViews.</p>
+        <br>
+        <p><strong>Version:</strong> 2.5.0</p>
+        <p><strong>Architecture:</strong> Fully Offline HTML5, CSS3, & Vanilla JavaScript Engine.</p>
+        <p><strong>Features:</strong> 17 Computation Modules, Local Server DB, Offline Manifest, Plotting Engine.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Navigation Modal & Share Handlers
+    function toggleModal(modalId, show) {
+      const modal = document.getElementById(modalId);
+      if (show) modal.classList.add('active');
+      else modal.classList.remove('active');
+    }
+
+    function handleModalClick(evt, modalId) {
+      if (evt.target.id === modalId) {
+        toggleModal(modalId, false);
+      }
+    }
+
+    function shareApp() {
+      const shareUrl = "https://webdeveloper-cpu.github.io/WebCraftStudio/ominical_pro.html";
+      const shareTitle = "OmniCalc Pro Engine";
+      
+      if (navigator.share) {
+        navigator.share({
+          title: shareTitle,
+          text: "Check out OmniCalc Pro - Multi-Functional Offline Calculation System!",
+          url: shareUrl
+        }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          alert("Share link copied to clipboard:\n" + shareUrl);
+        }).catch(() => {
+          alert("Share Link:\n" + shareUrl);
+        });
+      }
+    }
+
     // Comma Formatter Helpers
     function formatWithCommas(str) {
       if (!str) return '';
@@ -734,44 +952,6 @@
         let parts = rawVal.split('.');
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         inputElem.value = parts.join('.');
-      }
-    }
-
-    // SmartLink Array Engine
-    const SMARTLINKS = [
-      "https://omg10.com/4/9317445",
-      "https://omg10.com/4/9300114",
-      "https://omg10.com/4/9797627",
-      "https://omg10.com/4/9319730",
-      "https://omg10.com/4/9797691",
-      "https://omg10.com/4/9312449",
-      "https://omg10.com/4/9653889",
-      "https://omg10.com/4/9312448",
-      "https://omg10.com/4/9291146",
-      "https://omg10.com/4/9390162",
-      "https://omg10.com/4/9797599",
-      "https://omg10.com/4/9797624",
-      "https://omg10.com/4/9797693",
-      "https://omg10.com/4/9795846",
-      "https://omg10.com/4/9797602"
-    ];
-    let smartlinkIndex = 0;
-
-    function getNextSmartlink() {
-      const link = SMARTLINKS[smartlinkIndex];
-      smartlinkIndex = (smartlinkIndex + 1) % SMARTLINKS.length;
-      return link;
-    }
-
-    // Single unified handler triggering BOTH the smartlink iframe update and computation logic
-    function triggerAction(calcFunction) {
-      // 1. Load smartlink inside embedded iframe window
-      const link = getNextSmartlink();
-      document.getElementById('smartlink-iframe').src = link;
-
-      // 2. Perform math calculation
-      if (typeof calcFunction === 'function') {
-        calcFunction();
       }
     }
 
@@ -867,24 +1047,22 @@
     }
 
     function evalSci() {
-      triggerAction(() => {
-        try {
-          let cleanExpr = sciExpr.replace(/,/g, '');
-          let parsed = cleanExpr.replace(/pi/g, 'Math.PI').replace(/e/g, 'Math.E')
-            .replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(')
-            .replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/sqrt\(/g, 'Math.sqrt(').replace(/\^/g, '**');
+      try {
+        let cleanExpr = sciExpr.replace(/,/g, '');
+        let parsed = cleanExpr.replace(/pi/g, 'Math.PI').replace(/e/g, 'Math.E')
+          .replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(')
+          .replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/sqrt\(/g, 'Math.sqrt(').replace(/\^/g, '**');
 
-          let res = Function(`'use strict'; return (${parsed})`)();
-          let formattedRes = formatWithCommas(Number.isInteger(res) ? res.toString() : res.toFixed(6));
-          document.getElementById('sci-val').innerText = formattedRes;
-          updateResultDisplay(`Scientific Result: ${formattedRes}`);
-          
-          saveToPhoneServer('Scientific', sciExpr, formattedRes);
-        } catch (err) {
-          document.getElementById('sci-val').innerText = 'Error';
-          updateResultDisplay(`<span style="color:var(--danger);">Error evaluating expression</span>`);
-        }
-      });
+        let res = Function(`'use strict'; return (${parsed})`)();
+        let formattedRes = formatWithCommas(Number.isInteger(res) ? res.toString() : res.toFixed(6));
+        document.getElementById('sci-val').innerText = formattedRes;
+        updateResultDisplay(`Scientific Result: ${formattedRes}`);
+        
+        saveToPhoneServer('Scientific', sciExpr, formattedRes);
+      } catch (err) {
+        document.getElementById('sci-val').innerText = 'Error';
+        updateResultDisplay(`<span style="color:var(--danger);">Error evaluating expression</span>`);
+      }
     }
 
     // Square Root Engine
@@ -1128,7 +1306,7 @@
 
     // Calculus Engine
     function parseMath(expr, x) {
-      let p = expr.replace(/,/g, '').replace(/x/g, `(${x})`).replace(/sin/g, 'Math.sin').replace(/cos/g, 'Math.cos').replace(/tan/g, 'Math.tan').replace(/\^/g, '**');
+      let p = expr.replace(/,/g, '').replace(/\bx\b/g, `(${x})`).replace(/sin/g, 'Math.sin').replace(/cos/g, 'Math.cos').replace(/tan/g, 'Math.tan').replace(/\^/g, '**');
       return Function(`'use strict'; return (${p})`)();
     }
 
