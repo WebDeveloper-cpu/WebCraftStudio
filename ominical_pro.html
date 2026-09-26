@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniCalc Pro - Integrated Frame Server</title>
+
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="data:application/manifest+json,{
+    &quot;name&quot;: &quot;OmniCalc Mobile Engine&quot;,
+    &quot;short_name&quot;: &quot;OmniCalc&quot;,
+    &quot;start_url&quot;: &quot;.&quot;,
+    &quot;display&quot;: &quot;standalone&quot;,
+    &quot;background_color&quot;: &quot;#0f172a&quot;,
+    &quot;theme_color&quot;: &quot;#0f172a&quot;
+  }">
+
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --panel-bg: #0f172a;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary: #38bdf8;
+      --accent: #a855f7;
+      --success: #10b981;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .app-container {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 850px;
+      padding: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: 2px;
+    }
+
+    .mode-switch {
+      display: flex;
+      background-color: var(--bg-color);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      flex: 1;
+      min-width: 80px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 4px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .mode-btn.active {
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      border: 1px solid #34d399;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      transition: transform 0.1s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .action-btn:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.45);
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .action-btn.accent {
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+      border-color: #c084fc;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+    }
+
+    .action-btn.warning {
+      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+      border-color: #fbbf24;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      border-color: #7dd3fc;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Screen */
+    .screen {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: right;
+      margin-bottom: 16px;
+    }
+
+    .screen-expr {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      min-height: 1.2rem;
+      word-break: break-all;
+    }
+
+    .screen-val {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      overflow-x: auto;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .calc-btn {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 4px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .calc-btn:hover { background-color: var(--border-color); }
+    .calc-btn.op { color: var(--primary); }
+    .calc-btn.fn { color: var(--accent); }
+    .calc-btn.clear { color: var(--danger); }
+    .calc-btn.eq { 
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); 
+      color: var(--bg-color); 
+      font-weight: 800; 
+      border: none;
+      box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Forms */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .input-group label {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    input:focus, select:focus { border-color: var(--primary); }
+
+    /* Phone History */
+    .history-list {
+      max-height: 250px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .history-item {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .history-type {
+      color: var(--warning);
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    canvas {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 100%;
+      height: 220px;
+    }
+
+    /* Unified iFrame & Result Viewer Container */
+    .unified-viewer {
+      margin-top: 16px;
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-display-header {
+      background-color: #1e293b;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--success);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .iframe-window {
+      width: 100%;
+      height: 280px;
+      border: none;
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <h1>OmniCalc Pro Server Engine</h1>
+      <p>Interactive SmartLink & Embedded iFrame Results Viewer</p>
+    </header>
+
+    <div class="mode-switch">
+      <button class="mode-btn active" onclick="setMode(event, 'scientific')">Scientific</button>
+      <button class="mode-btn" onclick="setMode(event, 'sqrt')">Square Root</button>
+      <button class="mode-btn" onclick="setMode(event, 'roman')">Roman Numeral</button>
+      <button class="mode-btn" onclick="setMode(event, 'percent')">Percentage</button>
+      <button class="mode-btn" onclick="setMode(event, 'stats')">Full Stats</button>
+      <button class="mode-btn" onclick="setMode(event, 'geo')">GPS / Lat Long</button>
+      <button class="mode-btn" onclick="setMode(event, 'angles')">Angles</button>
+      <button class="mode-btn" onclick="setMode(event, 'base')">Binary / Base</button>
+      <button class="mode-btn" onclick="setMode(event, 'velocity')">Speed / Velocity</button>
+      <button class="mode-btn" onclick="setMode(event, 'temp')">Temperature</button>
+      <button class="mode-btn" onclick="setMode(event, 'calculus')">Calculus</button>
+      <button class="mode-btn" onclick="setMode(event, 'financial')">Financial</button>
+      <button class="mode-btn" onclick="setMode(event, 'vectors')">Vectors</button>
+      <button class="mode-btn" onclick="setMode(event, 'poly')">Polynomials</button>
+      <button class="mode-btn" onclick="setMode(event, 'converter')">Converter</button>
+      <button class="mode-btn" onclick="setMode(event, 'graphing')">Graphing</button>
+      <button class="mode-btn" onclick="setMode(event, 'storage')">Phone DB</button>
+    </div>
+
+    <!-- 1. Scientific Calculator -->
+    <div id="panel-scientific" class="panel active">
+      <div class="screen">
+        <div class="screen-expr" id="sci-expr"></div>
+        <div class="screen-val" id="sci-val">0</div>
+      </div>
+      <div class="calc-grid">
+        <button class="calc-btn fn" onclick="pressSci('sin(')">sin</button>
+        <button class="calc-btn fn" onclick="pressSci('cos(')">cos</button>
+        <button class="calc-btn fn" onclick="pressSci('tan(')">tan</button>
+        <button class="calc-btn op" onclick="pressSci('(')">(</button>
+        <button class="calc-btn op" onclick="pressSci(')')">)</button>
+
+        <button class="calc-btn fn" onclick="pressSci('log(')">log</button>
+        <button class="calc-btn fn" onclick="pressSci('ln(')">ln</button>
+        <button class="calc-btn fn" onclick="pressSci('sqrt(')">√</button>
+        <button class="calc-btn fn" onclick="pressSci('^')">x^y</button>
+        <button class="calc-btn op" onclick="pressSci('/')">÷</button>
+
+        <button class="calc-btn" onclick="pressSci('7')">7</button>
+        <button class="calc-btn" onclick="pressSci('8')">8</button>
+        <button class="calc-btn" onclick="pressSci('9')">9</button>
+        <button class="calc-btn op" onclick="pressSci('*')">×</button>
+        <button class="calc-btn clear" onclick="clearSci('BACK')">⌫ Back</button>
+
+        <button class="calc-btn" onclick="pressSci('4')">4</button>
+        <button class="calc-btn" onclick="pressSci('5')">5</button>
+        <button class="calc-btn" onclick="pressSci('6')">6</button>
+        <button class="calc-btn op" onclick="pressSci('-')">-</button>
+        <button class="calc-btn clear" onclick="clearSci('C')">C</button>
+
+        <button class="calc-btn" onclick="pressSci('1')">1</button>
+        <button class="calc-btn" onclick="pressSci('2')">2</button>
+        <button class="calc-btn" onclick="pressSci('3')">3</button>
+        <button class="calc-btn op" onclick="pressSci('+')">+</button>
+        <button class="calc-btn clear" onclick="clearSci('AC')">AC</button>
+
+        <button class="calc-btn fn" onclick="pressSci('pi')">π</button>
+        <button class="calc-btn" onclick="pressSci('0')">0</button>
+        <button class="calc-btn" onclick="pressSci('.')">.</button>
+        <button class="calc-btn fn" onclick="pressSci('e')">e</button>
+        <button class="calc-btn eq" onclick="evalSci()">=</button>
+      </div>
+    </div>
+
+    <!-- 2. Square Root & Radical Engine -->
+    <div id="panel-sqrt" class="panel">
+      <div class="grid-2">
+        <div class="input-group">
+          <label for="sqrt-val">Value / Radicand ($x$)</label>
+          <input type="text" id="sqrt-val" value="144" placeholder="Enter number" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="sqrt-degree">Root Degree ($n$th root)</label>
+          <input type="text" id="sqrt-degree" value="2" placeholder="2 for √, 3 for ∛" oninput="formatInputComma(this)">
+        </div>
+      </div>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeSqrt)">⚡ Calculate Root</button>
+    </div>
+
+    <!-- 3. Roman Numeral Converter -->
+    <div id="panel-roman" class="panel">
+      <div class="input-group" style="margin-bottom: 12px;">
+        <label for="roman-input">Number or Roman Numeral Input</label>
+        <input type="text" id="roman-input" value="2026" placeholder="e.g. 2026 or MMXXVI">
+      </div>
+      <div class="grid-2">
+        <button class="action-btn" onclick="triggerAction(() => computeRoman('toRoman'))">⚡ Convert Number to Roman</button>
+        <button class="action-btn accent" onclick="triggerAction(() => computeRoman('toDec'))">⚡ Convert Roman to Number</button>
+      </div>
+    </div>
+
+    <!-- 4. Percentage Calculator -->
+    <div id="panel-percent" class="panel">
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="pct-mode">Calculation Type</label>
+          <select id="pct-mode">
+            <option value="of">X% of Y</option>
+            <option value="change">% Change from X to Y</option>
+            <option value="is_pct">X is what % of Y</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="pct-x">Value X</label>
+          <input type="text" id="pct-x" value="15" placeholder="Value X" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="pct-y">Value Y</label>
+          <input type="text" id="pct-y" value="200" placeholder="Value Y" oninput="formatInputComma(this)">
+        </div>
+      </div>
+      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computePercentage)">⚡ Calculate Percentage</button>
+    </div>
+
+    <!-- 5. Advanced Statistics Engine -->
+    <div id="panel-stats" class="panel">
+      <div class="input-group">
+        <label for="stats-input">Dataset Values (Comma Separated)</label>
+        <textarea id="stats-input" rows="3" style="margin-top: 4px;">10, 20, 20, 30, 40, 50, 60, 70, 80</textarea>
+      </div>
+      <button class="action-btn primary" style="width: 100%; margin-top: 8px;" onclick="triggerAction(calcFullStats)">⚡ Compute Comprehensive Statistics</button>
+    </div>
+
+    <!-- 6. Longitude & Latitude GPS Engine -->
+    <div id="panel-geo" class="panel">
+      <div class="grid-2">
+        <div class="input-group">
+          <label for="geo-lat1">Point 1 Latitude (°)</label>
+          <input type="text" id="geo-lat1" value="5.1065" placeholder="e.g. 5.1065">
+        </div>
+        <div class="input-group">
+          <label for="geo-lon1">Point 1 Longitude (°)</label>
+          <input type="text" id="geo-lon1" value="7.3667" placeholder="e.g. 7.3667">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="input-group">
+          <label for="geo-lat2">Point 2 Latitude (°)</label>
+          <input type="text" id="geo-lat2" value="6.4531" placeholder="e.g. 6.4531">
+        </div>
+        <div class="input-group">
+          <label for="geo-lon2">Point 2 Longitude (°)</label>
+          <input type="text" id="geo-lon2" value="3.3958" placeholder="e.g. 3.3958">
+        </div>
+      </div>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeGeo)">⚡ Calculate Distance & Bearing</button>
+    </div>
+
+    <!-- 7. Angles & Trigonometry Unit Engine -->
+    <div id="panel-angles" class="panel">
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="angle-val">Angle Value</label>
+          <input type="text" id="angle-val" value="180" placeholder="Enter Angle" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="angle-from">From Unit</label>
+          <select id="angle-from">
+            <option value="deg">Degrees (°)</option>
+            <option value="rad">Radians (rad)</option>
+            <option value="grad">Gradians (grad)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="angle-to">To Unit</label>
+          <select id="angle-to">
+            <option value="rad">Radians (rad)</option>
+            <option value="deg">Degrees (°)</option>
+            <option value="grad">Gradians (grad)</option>
+          </select>
+        </div>
+      </div>
+      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeAngle)">⚡ Convert Angle & Trig Metrics</button>
+    </div>
+
+    <!-- 8. Binary & Base 10 Calculator -->
+    <div id="panel-base" class="panel">
+      <div class="grid-2">
+        <div class="input-group">
+          <label for="base-input">Input Number</label>
+          <input type="text" id="base-input" value="255" placeholder="Enter value">
+        </div>
+        <div class="input-group">
+          <label for="base-from">Source Base</label>
+          <select id="base-from">
+            <option value="10">Decimal (Base 10)</option>
+            <option value="2">Binary (Base 2)</option>
+            <option value="8">Octal (Base 8)</option>
+            <option value="16">Hexadecimal (Base 16)</option>
+          </select>
+        </div>
+      </div>
+      <button class="action-btn primary" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeBase)">⚡ Convert & Process Base</button>
+    </div>
+
+    <!-- 9. Speed & Velocity Engine -->
+    <div id="panel-velocity" class="panel">
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="vel-dist">Distance / Displacement (m)</label>
+          <input type="text" id="vel-dist" placeholder="e.g. 1,000" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="vel-time">Time Duration (s)</label>
+          <input type="text" id="vel-time" placeholder="e.g. 20" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="vel-speed">Speed / Velocity (m/s)</label>
+          <input type="text" id="vel-speed" placeholder="e.g. 50" oninput="formatInputComma(this)">
+        </div>
+      </div>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">* Fill any 2 values to compute the missing third variable.</p>
+      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeVelocity)">⚡ Calculate Velocity / Distance</button>
+    </div>
+
+    <!-- 10. Dedicated Temperature Converter -->
+    <div id="panel-temp" class="panel">
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="temp-val">Temperature Value</label>
+          <input type="text" id="temp-val" value="100" placeholder="Enter Temp" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="temp-from">From Scale</label>
+          <select id="temp-from">
+            <option value="C">Celsius (°C)</option>
+            <option value="F">Fahrenheit (°F)</option>
+            <option value="K">Kelvin (K)</option>
+            <option value="R">Rankine (°R)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="temp-to">To Scale</label>
+          <select id="temp-to">
+            <option value="F">Fahrenheit (°F)</option>
+            <option value="C">Celsius (°C)</option>
+            <option value="K">Kelvin (K)</option>
+            <option value="R">Rankine (°R)</option>
+          </select>
+        </div>
+      </div>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeTemperature)">⚡ Convert Temperature</button>
+    </div>
+
+    <!-- 11. Calculus Engine -->
+    <div id="panel-calculus" class="panel">
+      <div class="input-group" style="margin-bottom: 12px;">
+        <label for="calc-expr">Math Function Expression f(x)</label>
+        <input type="text" id="calc-expr" value="x^2 + sin(x)" placeholder="e.g. x^2 + sin(x)">
+      </div>
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="calc-a">Lower Bound (a)</label>
+          <input type="text" id="calc-a" value="0" placeholder="Lower Bound" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="calc-b">Upper Bound (b)</label>
+          <input type="text" id="calc-b" value="2" placeholder="Upper Bound" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="calc-x">Evaluation Point (x)</label>
+          <input type="text" id="calc-x" value="1" placeholder="Point x for f'(x)" oninput="formatInputComma(this)">
+        </div>
+      </div>
+      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeCalculus)">⚡ Compute Calculus</button>
+    </div>
+
+    <!-- 12. Financial Math -->
+    <div id="panel-financial" class="panel">
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="fin-p">Principal Amount ($)</label>
+          <input type="text" id="fin-p" value="10,000" placeholder="Principal" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="fin-r">Annual Interest Rate (%)</label>
+          <input type="text" id="fin-r" value="5" placeholder="Annual Rate" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="fin-t">Duration (Years)</label>
+          <input type="text" id="fin-t" value="3" placeholder="Time in Years" oninput="formatInputComma(this)">
+        </div>
+      </div>
+      <button class="action-btn primary" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeFinance)">⚡ Calculate Loan & Growth</button>
+    </div>
+
+    <!-- 13. Vector Math -->
+    <div id="panel-vectors" class="panel">
+      <div class="grid-2">
+        <div class="input-group">
+          <label for="vec-a">Vector A Components (x, y, z)</label>
+          <input type="text" id="vec-a" value="1, 2, 3" placeholder="Vector A (x, y, z)">
+        </div>
+        <div class="input-group">
+          <label for="vec-b">Vector B Components (x, y, z)</label>
+          <input type="text" id="vec-b" value="4, 5, 6" placeholder="Vector B (x, y, z)">
+        </div>
+      </div>
+      <button class="action-btn warning" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeVectors)">⚡ Process Vectors</button>
+    </div>
+
+    <!-- 14. Polynomial Solver -->
+    <div id="panel-poly" class="panel">
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="poly-a">Coefficient a (x²)</label>
+          <input type="text" id="poly-a" value="1" placeholder="a" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="poly-b">Coefficient b (x)</label>
+          <input type="text" id="poly-b" value="-5" placeholder="b" oninput="formatInputComma(this)">
+        </div>
+        <div class="input-group">
+          <label for="poly-c">Constant c</label>
+          <input type="text" id="poly-c" value="6" placeholder="c" oninput="formatInputComma(this)">
+        </div>
+      </div>
+      <button class="action-btn" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(solveQuadratic)">⚡ Solve Equation</button>
+    </div>
+
+    <!-- 15. Converter Mathematics Panel -->
+    <div id="panel-converter" class="panel">
+      <div class="grid-3">
+        <div class="input-group">
+          <label for="conv-category">Conversion Category</label>
+          <select id="conv-category" onchange="updateConverterUnits()">
+            <option value="length">Length</option>
+            <option value="weight">Weight / Mass</option>
+            <option value="volume">Volume</option>
+            <option value="currency">Currency Rate</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="conv-from">From Unit</label>
+          <select id="conv-from"></select>
+        </div>
+        <div class="input-group">
+          <label for="conv-to">To Unit</label>
+          <select id="conv-to"></select>
+        </div>
+      </div>
+      <div class="input-group" style="margin-bottom: 10px;">
+        <label for="conv-value">Value to Convert</label>
+        <input type="text" id="conv-value" value="1,000" placeholder="Enter Amount" oninput="formatInputComma(this)">
+      </div>
+      <button class="action-btn accent" style="width: 100%; margin-bottom: 8px;" onclick="triggerAction(computeConversion)">⚡ Convert Unit</button>
+    </div>
+
+    <!-- 16. Graphing Panel -->
+    <div id="panel-graphing" class="panel">
+      <div class="input-row">
+        <div class="input-group">
+          <label for="graph-expr">Graph Equation f(x)</label>
+          <input type="text" id="graph-expr" value="sin(x)" placeholder="e.g. x^2 - 4 or sin(x)">
+        </div>
+        <button class="action-btn primary" style="flex: 0 0 110px; align-self: flex-end;" onclick="triggerAction(renderGraph)">⚡ Plot</button>
+      </div>
+      <canvas id="graphCanvas"></canvas>
+    </div>
+
+    <!-- 17. Phone Storage DB Panel -->
+    <div id="panel-storage" class="panel">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <label style="font-size: 0.8rem; color: var(--text-muted);">PHONE LOCAL SERVER LOGS</label>
+        <div style="display: flex; gap: 6px;">
+          <button class="action-btn" style="padding: 6px 12px; font-size: 0.75rem;" onclick="exportToPhoneStorage()">Save to Phone File</button>
+          <button class="action-btn" style="padding: 6px 12px; font-size: 0.75rem; background: var(--danger); border-color: #f87171;" onclick="clearHistory()">Clear Phone DB</button>
+        </div>
+      </div>
+      <div class="history-list" id="history-container"></div>
+    </div>
+
+    <!-- Unified Display Output (Output Result & Embedded iFrame SmartLink Panel) -->
+    <div class="unified-viewer">
+      <div class="result-display-header" id="calc-result-header">
+        Result: Ready for computation
+      </div>
+      <iframe class="iframe-window" id="smartlink-iframe" src="about:blank"></iframe>
+    </div>
+
+  </div>
+
+  <script>
+    // Comma Formatter Helpers
+    function formatWithCommas(str) {
+      if (!str) return '';
+      return str.replace(/\b\d+(\.\d+)?\b/g, (match) => {
+        let parts = match.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+      });
+    }
+
+    function cleanNumber(val) {
+      if (typeof val !== 'string') return val;
+      return parseFloat(val.replace(/,/g, '')) || 0;
+    }
+
+    function formatInputComma(inputElem) {
+      let rawVal = inputElem.value.replace(/,/g, '');
+      if (!isNaN(rawVal) && rawVal !== '') {
+        let parts = rawVal.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        inputElem.value = parts.join('.');
+      }
+    }
+
+    // SmartLink Array Engine
+    const SMARTLINKS = [
+      "https://omg10.com/4/9317445",
+      "https://omg10.com/4/9300114",
+      "https://omg10.com/4/9797627",
+      "https://omg10.com/4/9319730",
+      "https://omg10.com/4/9797691",
+      "https://omg10.com/4/9312449",
+      "https://omg10.com/4/9653889",
+      "https://omg10.com/4/9312448",
+      "https://omg10.com/4/9291146",
+      "https://omg10.com/4/9390162",
+      "https://omg10.com/4/9797599",
+      "https://omg10.com/4/9797624",
+      "https://omg10.com/4/9797693",
+      "https://omg10.com/4/9795846",
+      "https://omg10.com/4/9797602"
+    ];
+    let smartlinkIndex = 0;
+
+    function getNextSmartlink() {
+      const link = SMARTLINKS[smartlinkIndex];
+      smartlinkIndex = (smartlinkIndex + 1) % SMARTLINKS.length;
+      return link;
+    }
+
+    // Single unified handler triggering BOTH the smartlink iframe update and computation logic
+    function triggerAction(calcFunction) {
+      // 1. Load smartlink inside embedded iframe window
+      const link = getNextSmartlink();
+      document.getElementById('smartlink-iframe').src = link;
+
+      // 2. Perform math calculation
+      if (typeof calcFunction === 'function') {
+        calcFunction();
+      }
+    }
+
+    function updateResultDisplay(text) {
+      document.getElementById('calc-result-header').innerHTML = text;
+    }
+
+    // Local DB Storage
+    const PHONE_DB_KEY = 'OMNI_CALC_PHONE_SERVER_DB';
+
+    function saveToPhoneServer(type, expression, result) {
+      const logs = JSON.parse(localStorage.getItem(PHONE_DB_KEY) || '[]');
+      const entry = {
+        id: Date.now(),
+        time: new Date().toLocaleTimeString(),
+        date: new Date().toLocaleDateString(),
+        type: type,
+        expression: formatWithCommas(expression.toString()),
+        result: formatWithCommas(result.toString())
+      };
+      logs.unshift(entry);
+      localStorage.setItem(PHONE_DB_KEY, JSON.stringify(logs.slice(0, 100)));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const logs = JSON.parse(localStorage.getItem(PHONE_DB_KEY) || '[]');
+      const container = document.getElementById('history-container');
+      
+      if(logs.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 20px;">No calculations stored in phone server DB.</div>`;
+        return;
+      }
+
+      container.innerHTML = logs.map(item => `
+        <div class="history-item">
+          <div>
+            <span class="history-type">[${item.type}]</span> <strong>${item.expression}</strong> = <span style="color:var(--primary);">${item.result}</span>
+          </div>
+          <span style="font-size: 0.7rem; color: var(--text-muted);">${item.time}</span>
+        </div>
+      `).join('');
+    }
+
+    function clearHistory() {
+      localStorage.removeItem(PHONE_DB_KEY);
+      renderHistory();
+    }
+
+    function exportToPhoneStorage() {
+      const logs = localStorage.getItem(PHONE_DB_KEY) || '[]';
+      const blob = new Blob([logs], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `phone_calc_backup_${Date.now()}.txt`;
+      a.click();
+    }
+
+    // Navigation Switcher
+    function setMode(evt, mode) {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      
+      evt.target.classList.add('active');
+      document.getElementById(`panel-${mode}`).classList.add('active');
+
+      if(mode === 'graphing') renderGraph();
+      if(mode === 'storage') renderHistory();
+      if(mode === 'converter') updateConverterUnits();
+    }
+
+    // Scientific Logic
+    let sciExpr = '';
+    
+    function pressSci(val) { 
+      sciExpr += val; 
+      document.getElementById('sci-expr').innerText = formatWithCommas(sciExpr); 
+    }
+    
+    function clearSci(type) {
+      if (type === 'AC') { sciExpr = ''; document.getElementById('sci-val').innerText = '0'; }
+      else if (type === 'C') { sciExpr = ''; }
+      else if (type === 'BACK') {
+        const fns = ['sin(', 'cos(', 'tan(', 'log(', 'ln(', 'sqrt('];
+        let found = false;
+        for (let fn of fns) {
+          if (sciExpr.endsWith(fn)) { sciExpr = sciExpr.slice(0, -fn.length); found = true; break; }
+        }
+        if (!found) sciExpr = sciExpr.slice(0, -1);
+      }
+      document.getElementById('sci-expr').innerText = formatWithCommas(sciExpr);
+    }
+
+    function evalSci() {
+      triggerAction(() => {
+        try {
+          let cleanExpr = sciExpr.replace(/,/g, '');
+          let parsed = cleanExpr.replace(/pi/g, 'Math.PI').replace(/e/g, 'Math.E')
+            .replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(')
+            .replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/sqrt\(/g, 'Math.sqrt(').replace(/\^/g, '**');
+
+          let res = Function(`'use strict'; return (${parsed})`)();
+          let formattedRes = formatWithCommas(Number.isInteger(res) ? res.toString() : res.toFixed(6));
+          document.getElementById('sci-val').innerText = formattedRes;
+          updateResultDisplay(`Scientific Result: ${formattedRes}`);
+          
+          saveToPhoneServer('Scientific', sciExpr, formattedRes);
+        } catch (err) {
+          document.getElementById('sci-val').innerText = 'Error';
+          updateResultDisplay(`<span style="color:var(--danger);">Error evaluating expression</span>`);
+        }
+      });
+    }
+
+    // Square Root Engine
+    function computeSqrt() {
+      const val = cleanNumber(document.getElementById('sqrt-val').value);
+      const degree = cleanNumber(document.getElementById('sqrt-degree').value) || 2;
+
+      if (val < 0 && degree % 2 === 0) {
+        updateResultDisplay(`<span style="color: var(--danger);">Even root of negative number is complex.</span>`);
+        return;
+      }
+
+      const res = Math.pow(val, 1 / degree);
+      const formattedRes = formatWithCommas(Number.isInteger(res) ? res.toString() : res.toFixed(6));
+      const text = `${degree === 2 ? '√' : degree + '√'}${formatWithCommas(val.toString())} = <strong>${formattedRes}</strong>`;
+      
+      updateResultDisplay(text);
+      saveToPhoneServer('Square Root', `${degree}√(${val})`, formattedRes);
+    }
+
+    // Roman Numeral Converter
+    function computeRoman(mode) {
+      const input = document.getElementById('roman-input').value.trim();
+
+      if (mode === 'toRoman') {
+        let num = cleanNumber(input);
+        if (num <= 0 || num > 3999 || !Number.isInteger(num)) {
+          updateResultDisplay(`<span style="color: var(--danger);">Please enter a whole integer between 1 and 3,999.</span>`);
+          return;
+        }
+
+        const map = [
+          [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
+          [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
+          [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']
+        ];
+        let roman = '';
+        for (let [val, letter] of map) {
+          while (num >= val) { roman += letter; num -= val; }
+        }
+        updateResultDisplay(`Roman Numeral: <strong>${roman}</strong>`);
+        saveToPhoneServer('Roman Converter', input, roman);
+      } else {
+        let str = input.toUpperCase();
+        const map = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+        let dec = 0;
+        for (let i = 0; i < str.length; i++) {
+          let curr = map[str[i]], next = map[str[i + 1]];
+          if (!curr) {
+            updateResultDisplay(`<span style="color: var(--danger);">Invalid Roman Numeral character.</span>`);
+            return;
+          }
+          if (next && curr < next) { dec += (next - curr); i++; }
+          else { dec += curr; }
+        }
+        const formattedDec = formatWithCommas(dec.toString());
+        updateResultDisplay(`Decimal Number: <strong>${formattedDec}</strong>`);
+        saveToPhoneServer('Roman Converter', str, formattedDec);
+      }
+    }
+
+    // Percentage Calculation
+    function computePercentage() {
+      const mode = document.getElementById('pct-mode').value;
+      const x = cleanNumber(document.getElementById('pct-x').value);
+      const y = cleanNumber(document.getElementById('pct-y').value);
+
+      let res = 0, text = '';
+      if (mode === 'of') {
+        res = (x / 100) * y;
+        text = `${x}% of ${formatWithCommas(y.toString())} = <strong>${formatWithCommas(res.toFixed(2))}</strong>`;
+      } else if (mode === 'change') {
+        if (x === 0) return;
+        res = ((y - x) / x) * 100;
+        text = `Percentage Change from ${formatWithCommas(x.toString())} to ${formatWithCommas(y.toString())} = <strong>${formatWithCommas(res.toFixed(2))}%</strong>`;
+      } else if (mode === 'is_pct') {
+        if (y === 0) return;
+        res = (x / y) * 100;
+        text = `${formatWithCommas(x.toString())} is <strong>${formatWithCommas(res.toFixed(2))}%</strong> of ${formatWithCommas(y.toString())}`;
+      }
+
+      updateResultDisplay(text);
+      saveToPhoneServer('Percentage', `Mode:${mode} (X:${x}, Y:${y})`, `${res.toFixed(2)}`);
+    }
+
+    // Comprehensive Statistics
+    function calcFullStats() {
+      const raw = document.getElementById('stats-input').value;
+      const arr = raw.split(',').map(n => cleanNumber(n.trim())).filter(n => !isNaN(n)).sort((a, b) => a - b);
+      
+      if (arr.length === 0) {
+        updateResultDisplay(`<span style="color: var(--danger);">Please enter a valid dataset.</span>`);
+        return;
+      }
+
+      const n = arr.length;
+      const sum = arr.reduce((a, b) => a + b, 0);
+      const mean = sum / n;
+
+      let median = 0;
+      if (n % 2 === 0) { median = (arr[n / 2 - 1] + arr[n / 2]) / 2; }
+      else { median = arr[Math.floor(n / 2)]; }
+
+      const variance = arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n;
+      const stdDev = Math.sqrt(variance);
+
+      const html = `Stats (N=${n}): Mean = <strong>${formatWithCommas(mean.toFixed(2))}</strong> | Median = <strong>${formatWithCommas(median.toString())}</strong> | StdDev = <strong>${formatWithCommas(stdDev.toFixed(2))}</strong>`;
+
+      updateResultDisplay(html);
+      saveToPhoneServer('Full Statistics', `Dataset N=${n}`, `Mean: ${mean.toFixed(2)}, StdDev: ${stdDev.toFixed(2)}`);
+    }
+
+    // GPS Engine
+    function computeGeo() {
+      const lat1 = parseFloat(document.getElementById('geo-lat1').value);
+      const lon1 = parseFloat(document.getElementById('geo-lon1').value);
+      const lat2 = parseFloat(document.getElementById('geo-lat2').value);
+      const lon2 = parseFloat(document.getElementById('geo-lon2').value);
+
+      if (isNaN(lat1) || isNaN(lon1) || isNaN(lat2) || isNaN(lon2)) {
+        updateResultDisplay(`<span style="color: var(--danger);">Invalid Latitude/Longitude values.</span>`);
+        return;
+      }
+
+      const toRad = x => x * Math.PI / 180;
+      const R = 6371;
+
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distKm = R * c;
+
+      const html = `GPS Distance: <strong>${formatWithCommas(distKm.toFixed(2))} km</strong> (${formatWithCommas((distKm * 0.621371).toFixed(2))} miles)`;
+
+      updateResultDisplay(html);
+      saveToPhoneServer('GPS Distance', `(${lat1},${lon1}) → (${lat2},${lon2})`, `${distKm.toFixed(2)} km`);
+    }
+
+    // Angle Converter
+    function computeAngle() {
+      const val = cleanNumber(document.getElementById('angle-val').value);
+      const from = document.getElementById('angle-from').value;
+      const to = document.getElementById('angle-to').value;
+
+      let deg = 0;
+      if (from === 'deg') deg = val;
+      else if (from === 'rad') deg = val * (180 / Math.PI);
+      else if (from === 'grad') deg = val * 0.9;
+
+      let res = 0;
+      if (to === 'deg') res = deg;
+      else if (to === 'rad') res = deg * (Math.PI / 180);
+      else if (to === 'grad') res = deg / 0.9;
+
+      const html = `Angle Conversion: <strong>${formatWithCommas(res.toFixed(4))} ${to}</strong>`;
+
+      updateResultDisplay(html);
+      saveToPhoneServer('Angles', `${val} ${from} → ${to}`, res.toFixed(4));
+    }
+
+    // Base Processor
+    function computeBase() {
+      const rawVal = document.getElementById('base-input').value.trim();
+      const fromBase = parseInt(document.getElementById('base-from').value);
+      const decVal = parseInt(rawVal, fromBase);
+
+      if (isNaN(decVal)) {
+        updateResultDisplay(`<span style="color: var(--danger);">Invalid Number for Base ${fromBase}</span>`);
+        return;
+      }
+
+      const bin = decVal.toString(2);
+      const dec = decVal.toString(10);
+      const hex = decVal.toString(16).toUpperCase();
+
+      const html = `Base Convert: Dec: <strong>${formatWithCommas(dec)}</strong> | Bin: <strong>${bin}</strong> | Hex: <strong>${hex}</strong>`;
+
+      updateResultDisplay(html);
+      saveToPhoneServer('Base Engine', `${rawVal} (base ${fromBase})`, `Dec: ${formatWithCommas(dec)}`);
+    }
+
+    // Velocity Calculator
+    function computeVelocity() {
+      const dElem = document.getElementById('vel-dist');
+      const tElem = document.getElementById('vel-time');
+      const vElem = document.getElementById('vel-speed');
+
+      let d = dElem.value ? cleanNumber(dElem.value) : null;
+      let t = tElem.value ? cleanNumber(tElem.value) : null;
+      let v = vElem.value ? cleanNumber(vElem.value) : null;
+
+      let resText = '';
+
+      if (d !== null && t !== null && t !== 0) {
+        v = d / t;
+        vElem.value = formatWithCommas(v.toFixed(2));
+        resText = `Speed (v) = <strong>${formatWithCommas(v.toFixed(2))} m/s</strong>`;
+      } else if (v !== null && t !== null) {
+        d = v * t;
+        dElem.value = formatWithCommas(d.toFixed(2));
+        resText = `Distance (d) = <strong>${formatWithCommas(d.toFixed(2))} meters</strong>`;
+      } else if (d !== null && v !== null && v !== 0) {
+        t = d / v;
+        tElem.value = formatWithCommas(t.toFixed(2));
+        resText = `Time (t) = <strong>${formatWithCommas(t.toFixed(2))} seconds</strong>`;
+      } else {
+        updateResultDisplay(`<span style="color: var(--danger);">Please enter at least 2 valid numerical fields.</span>`);
+        return;
+      }
+
+      updateResultDisplay(resText);
+      saveToPhoneServer('Velocity', `d:${d||'?'}m, t:${t||'?'}s, v:${v||'?'}m/s`, resText);
+    }
+
+    // Temperature Converter
+    function computeTemperature() {
+      const val = cleanNumber(document.getElementById('temp-val').value);
+      const from = document.getElementById('temp-from').value;
+      const to = document.getElementById('temp-to').value;
+
+      let celsius = 0;
+      if (from === 'C') celsius = val;
+      else if (from === 'F') celsius = (val - 32) * 5 / 9;
+      else if (from === 'K') celsius = val - 273.15;
+      else if (from === 'R') celsius = (val - 491.67) * 5 / 9;
+
+      let result = 0;
+      if (to === 'C') result = celsius;
+      else if (to === 'F') result = (celsius * 9 / 5) + 32;
+      else if (to === 'K') result = celsius + 273.15;
+      else if (to === 'R') result = (celsius + 273.15) * 9 / 5;
+
+      const formattedRes = formatWithCommas(result.toFixed(2));
+      updateResultDisplay(`Temperature: <strong>${formattedRes} °${to}</strong>`);
+
+      saveToPhoneServer('Temperature', `${formatWithCommas(val.toString())} °${from} → °${to}`, `${formattedRes} °${to}`);
+    }
+
+    // Calculus Engine
+    function parseMath(expr, x) {
+      let p = expr.replace(/,/g, '').replace(/x/g, `(${x})`).replace(/sin/g, 'Math.sin').replace(/cos/g, 'Math.cos').replace(/tan/g, 'Math.tan').replace(/\^/g, '**');
+      return Function(`'use strict'; return (${p})`)();
+    }
+
+    function computeCalculus() {
+      const expr = document.getElementById('calc-expr').value;
+      const a = cleanNumber(document.getElementById('calc-a').value);
+      const b = cleanNumber(document.getElementById('calc-b').value);
+      const xPt = cleanNumber(document.getElementById('calc-x').value);
+
+      const h = 0.00001;
+      const deriv = (parseMath(expr, xPt + h) - parseMath(expr, xPt - h)) / (2 * h);
+
+      const n = 1000;
+      const step = (b - a) / n;
+      let integral = 0.5 * (parseMath(expr, a) + parseMath(expr, b));
+      for (let i = 1; i < n; i++) { integral += parseMath(expr, a + i * step); }
+      integral *= step;
+
+      const html = `Derivative f'(${formatWithCommas(xPt.toString())}) = <strong>${formatWithCommas(deriv.toFixed(4))}</strong> | Integral ∫ = <strong>${formatWithCommas(integral.toFixed(4))}</strong>`;
+
+      updateResultDisplay(html);
+      saveToPhoneServer('Calculus', `∫[${a},${b}] (${expr})`, integral.toFixed(4));
+    }
+
+    // Financial Loan Engine
+    function computeFinance() {
+      const P = cleanNumber(document.getElementById('fin-p').value);
+      const r = cleanNumber(document.getElementById('fin-r').value) / 100;
+      const t = cleanNumber(document.getElementById('fin-t').value);
+
+      const A = P * Math.pow((1 + r), t);
+      const rM = r / 12;
+      const nTotal = t * 12;
+      const pmt = (P * rM * Math.pow(1 + rM, nTotal)) / (Math.pow(1 + rM, nTotal) - 1);
+
+      const html = `Future Value: <strong>$${formatWithCommas(A.toFixed(2))}</strong> | Monthly Pmt: <strong>$${formatWithCommas(pmt.toFixed(2))}</strong>`;
+
+      updateResultDisplay(html);
+      saveToPhoneServer('Finance', `Loan $${formatWithCommas(P.toString())} @ ${r*100}% for ${t}yr`, `$${formatWithCommas(pmt.toFixed(2))}`);
+    }
+
+    // Vector Processor
+    function computeVectors() {
+      const va = document.getElementById('vec-a').value.split(',').map(s => cleanNumber(s.trim()));
+      const vb = document.getElementById('vec-b').value.split(',').map(s => cleanNumber(s.trim()));
+
+      if(va.length !== 3 || vb.length !== 3) return;
+
+      const dot = va[0]*vb[0] + va[1]*vb[1] + va[2]*vb[2];
+      const html = `Dot Product (A · B): <strong>${formatWithCommas(dot.toString())}</strong>`;
+
+      updateResultDisplay(html);
+      saveToPhoneServer('Vector', `[${va.join(',')}] · [${vb.join(',')}]`, formatWithCommas(dot.toString()));
+    }
+
+    // Polynomial Solver
+    function solveQuadratic() {
+      const a = cleanNumber(document.getElementById('poly-a').value);
+      const b = cleanNumber(document.getElementById('poly-b').value);
+      const c = cleanNumber(document.getElementById('poly-c').value);
+
+      const d = b*b - 4*a*c;
+      let res = '';
+
+      if (d > 0) {
+        const x1 = (-b + Math.sqrt(d)) / (2*a);
+        const x2 = (-b - Math.sqrt(d)) / (2*a);
+        res = `x₁ = ${formatWithCommas(x1.toFixed(3))}, x₂ = ${formatWithCommas(x2.toFixed(3))}`;
+      } else if (d === 0) {
+        const x = -b / (2*a);
+        res = `x = ${formatWithCommas(x.toFixed(3))}`;
+      } else {
+        const real = formatWithCommas((-b / (2*a)).toFixed(3));
+        const imag = formatWithCommas((Math.sqrt(-d) / (2*a)).toFixed(3));
+        res = `${real} ± ${imag}i`;
+      }
+
+      updateResultDisplay(`Polynomial Roots: <strong>${res}</strong>`);
+      saveToPhoneServer('Polynomial', `${a}x² + ${b}x + ${c}`, res);
+    }
+
+    // Converter Engine
+    const CONVERTER_UNITS = {
+      length: { 'Meters (m)': 1, 'Kilometers (km)': 1000, 'Centimeters (cm)': 0.01, 'Miles (mi)': 1609.34, 'Feet (ft)': 0.3048 },
+      weight: { 'Kilograms (kg)': 1, 'Grams (g)': 0.001, 'Pounds (lbs)': 0.453592, 'Ounces (oz)': 0.0283495 },
+      volume: { 'Liters (L)': 1, 'Milliliters (mL)': 0.001, 'Gallons (US)': 3.78541 },
+      currency: { 'USD ($)': 1, 'EUR (€)': 1.08, 'GBP (£)': 1.27, 'NGN (₦)': 0.00065 }
+    };
+
+    function updateConverterUnits() {
+      const cat = document.getElementById('conv-category').value;
+      const fromSel = document.getElementById('conv-from');
+      const toSel = document.getElementById('conv-to');
+      
+      const units = Object.keys(CONVERTER_UNITS[cat]);
+      fromSel.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+      toSel.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+      if(units.length > 1) toSel.selectedIndex = 1;
+    }
+
+    function computeConversion() {
+      const cat = document.getElementById('conv-category').value;
+      const fromUnit = document.getElementById('conv-from').value;
+      const toUnit = document.getElementById('conv-to').value;
+      const val = cleanNumber(document.getElementById('conv-value').value);
+
+      const rates = CONVERTER_UNITS[cat];
+      const baseVal = val * rates[fromUnit];
+      const result = baseVal / rates[toUnit];
+
+      const formattedResult = formatWithCommas(result.toFixed(4));
+      updateResultDisplay(`Converted Result: <strong>${formattedResult} ${toUnit}</strong>`);
+      saveToPhoneServer('Converter', `${formatWithCommas(val.toString())} ${fromUnit} → ${toUnit}`, formattedResult);
+    }
+
+    // Graph Renderer
+    function renderGraph() {
+      const canvas = document.getElementById('graphCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      const width = canvas.width, height = canvas.height;
+      const expr = document.getElementById('graph-expr').value;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(width / 2, 0); ctx.lineTo(width / 2, height);
+      ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      const scale = 30; let first = true;
+
+      for (let px = 0; px < width; px++) {
+        let x = (px - width / 2) / scale;
+        try {
+          let y = parseMath(expr, x);
+          let py = height / 2 - (y * scale);
+          if (first) { ctx.moveTo(px, py); first = false; }
+          else { ctx.lineTo(px, py); }
+        } catch(e) {}
+      }
+      ctx.stroke();
+      updateResultDisplay(`Plotted Equation: <strong>f(x) = ${expr}</strong>`);
+    }
+
+    // Init
+    renderHistory();
+    updateConverterUnits();
+  </script>
+</body>
+</html>
