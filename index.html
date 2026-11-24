@@ -1,87 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Computer House | Learn Tech & Coding</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Interactive HTML Tutorial</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            background: var(--card);
+            padding: 50px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.2rem;
+            color: #0f172a;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 14px 32px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .file-info {
+            display: block;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        section {
+            background: var(--card);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #0f172a;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 10px;
+        }
+
+        .steps {
+            padding-left: 20px;
+        }
+
+        .steps li {
+            margin-bottom: 15px;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.95em;
+            color: #0f172a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+
+        .badge-good {
+            color: #15803d;
+            font-weight: 600;
+        }
+
+        .badge-bad {
+            color: #b91c1c;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- SHARED HEADER & NAVIGATION -->
-  <header>
-    <nav>
-      <a href="index.html" class="logo">C<span>H</span></a>
-      <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="computer.html">Computer Basics</a></li>
-        <li><a href="html.html">HTML</a></li>
-        <li><a href="css.html">CSS</a></li>
-        <li><a href="js.html">JavaScript</a></li>
-        <li><a href="php.html">PHP</a></li>
-        <li><a href="sql.html">SQL</a></li>
-        <li><a href="java.html">Java</a></li>
-      </ul>
-    </nav>
-  </header>
+<div class="container">
+    <!-- Hero / Download Section -->
+    <header>
+        <h1>Interactive HTML Tutorial</h1>
+        <p class="subtitle">Learn web development hands-on. Download the complete offline guide and run it directly in your browser.</p>
+        
+        <!-- The 'download' attribute forces the browser to save the file rather than just navigating to it -->
+        <a href="html_tutorial.html" download="html_tutorial.html" class="download-btn">
+            Download html_tutorial.html
+        </a>
+        <span class="file-info">Format: Single HTML File • Works 100% Offline</span>
+    </header>
 
-  <!-- MAIN CONTENT -->
-  <main>
-    <section class="hero">
-      <h1>Welcome to Computer House</h1>
-      <p>Your ultimate destination for mastering hardware fundamentals and modern backend programming languages.</p>
+    <!-- How to Open Instructions -->
+    <section>
+        <h2>How to Open and Use the File</h2>
+        <p>You do not need special software or an internet connection to use this guide. Choose either method below:</p>
+        
+        <h3>Method 1: Direct Browser Open (Easiest)</h3>
+        <ol class="steps">
+            <li>Locate <code>html_tutorial.html</code> in your computer's <strong>Downloads</strong> folder.</li>
+            <li><strong>Double-click</strong> the file. It will automatically open in your default web browser (Chrome, Edge, Safari, or Firefox).</li>
+            <li><em>Alternative:</em> Right-click the file, select <strong>Open with</strong>, and choose your preferred web browser.</li>
+        </ol>
+
+        <h3>Method 2: Running on a Local Server (For Developers)</h3>
+        <p>If you want to practice editing the code or run live-reload features:</p>
+        <ol class="steps">
+            <li>Open the folder containing <code>html_tutorial.html</code> in <strong>VS Code</strong>.</li>
+            <li>Install and click the <strong>Go Live</strong> (Live Server) button at the bottom right, or run <code>python -m http.server</code> in your terminal.</li>
+            <li>Visit <code>http://localhost:8000/html_tutorial.html</code> in your browser.</li>
+        </ol>
     </section>
 
-    <div class="grid-container">
-      <div class="card">
-        <h3>Computer Fundamentals</h3>
-        <p>Learn how hardware, operating systems, memory, and computer networks work from the ground up.</p>
-        <a href="computer.html" class="btn">Start Tutorial</a>
-      </div>
+    <!-- Why HTML is Better Than PDF -->
+    <section>
+        <h2>Why This HTML Guide is Better Than a PDF</h2>
+        <p>Traditional tutorials are distributed as static PDFs, which limits how you learn web development. Using a native HTML file gives you major advantages:</p>
 
-      <div class="card">
-        <h3>HTML (HyperText Markup Language)</h3>
-        <p>The skeleton of the web. Learn semantic elements, tags, forms, and page structure.</p>
-        <a href="html.html" class="btn">Start Tutorial</a>
-      </div>
-
-      <div class="card">
-        <h3>CSS (Cascading Style Sheets)</h3>
-        <p>Style your web pages with colors, typography, Flexbox, Grid, and responsive designs.</p>
-        <a href="css.html" class="btn">Start Tutorial</a>
-      </div>
-
-      <div class="card">
-        <h3>JavaScript</h3>
-        <p>Add interactivity, handle events, manipulate the DOM, and build dynamic web applications.</p>
-        <a href="js.html" class="btn">Start Tutorial</a>
-      </div>
-
-      <div class="card">
-        <h3>PHP</h3>
-        <p>Server-side scripting language for processing forms, managing sessions, and dynamic websites.</p>
-        <a href="php.html" class="btn">Start Tutorial</a>
-      </div>
-
-      <div class="card">
-        <h3>SQL</h3>
-        <p>Query, manage, and structure relational databases using Structured Query Language.</p>
-        <a href="sql.html" class="btn">Start Tutorial</a>
-      </div>
-
-      <div class="card">
-        <h3>Java</h3>
-        <p>Object-oriented programming fundamentals, syntax, classes, and enterprise application basics.</p>
-        <a href="java.html" class="btn">Start Tutorial</a>
-      </div>
-    </div>
-  </main>
-
-  <!-- SHARED FOOTER -->
-  <footer>
-    <p>&copy; 2026 Computer House. All rights reserved. <a href="index.html">Back to Top</a></p>
-  </footer>
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>HTML Tutorial (This File)</th>
+                    <th>Standard PDF</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Interactivity</strong></td>
+                    <td class="badge-good">Live buttons, collapsible sections, and interactive demos</td>
+                    <td class="badge-bad">Static, flat pages</td>
+                </tr>
+                <tr>
+                    <td><strong>Screen Responsiveness</strong></td>
+                    <td class="badge-good">Automatically adjusts to laptops, tablets, and phones</td>
+                    <td class="badge-bad">Requires awkward pinching and zooming on smaller screens</td>
+                </tr>
+                <tr>
+                    <td><strong>Inspect & Learn</strong></td>
+                    <td class="badge-good">Right-click any element &rarr; "Inspect" to see how the page itself was built</td>
+                    <td class="badge-bad">Source code is hidden and locked</td>
+                </tr>
+                <tr>
+                    <td><strong>Copy-Pasting Code</strong></td>
+                    <td class="badge-good">Clean formatting without broken line numbers or weird spacing</td>
+                    <td class="badge-bad">Often copies hidden characters or broken indentation</td>
+                </tr>
+                <tr>
+                    <td><strong>File Size & Speed</strong></td>
+                    <td class="badge-good">Lightweight plain text that loads instantly</td>
+                    <td class="badge-bad">Often heavy and slow to render</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
 
 </body>
 </html>
-    
+ 
