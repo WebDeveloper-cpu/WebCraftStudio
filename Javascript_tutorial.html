@@ -1,0 +1,1756 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Complete JavaScript Tutorial</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #222;
+    line-height: 1.7;
+}
+
+header {
+    background: #172554;
+    color: white;
+    padding: 25px 15px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+header p {
+    margin: 8px 0 0;
+    color: #dbeafe;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+}
+
+h2 {
+    color: #1d4ed8;
+}
+
+h3 {
+    color: #334155;
+}
+
+button {
+    border: none;
+    padding: 12px 16px;
+    margin: 5px 3px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.primary {
+    background: #2563eb;
+    color: white;
+}
+
+.secondary {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.success {
+    background: #15803d;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.topic-button {
+    background: white;
+    border: 1px solid #dbeafe;
+    color: #1e40af;
+    text-align: left;
+    padding: 15px;
+    border-radius: 9px;
+    width: 100%;
+}
+
+.topic-button span {
+    display: block;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: normal;
+}
+
+.lesson-number {
+    color: #64748b;
+    font-size: 14px;
+}
+
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+code {
+    font-family: Consolas, monospace;
+}
+
+.note {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fff7ed;
+    border-left: 4px solid #ea580c;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 25px;
+}
+
+.navigation button {
+    flex: 1;
+    min-width: 100px;
+}
+
+#practiceCode {
+    width: 100%;
+    min-height: 180px;
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-family: Consolas, monospace;
+    font-size: 15px;
+    resize: vertical;
+}
+
+#practiceOutput {
+    width: 100%;
+    height: 180px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    border-radius: 8px;
+}
+
+footer {
+    background: #172554;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.hidden {
+    display: none;
+}
+
+.progress {
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-bar {
+    background: #2563eb;
+    height: 100%;
+    width: 0%;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 23px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .navigation button {
+        font-size: 13px;
+        padding: 11px 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>JavaScript Tutorial</h1>
+    <p>Learn JavaScript from beginner to advanced</p>
+</header>
+
+<div class="container">
+
+<!-- CURRICULUM PAGE -->
+
+<section id="curriculumPage">
+
+    <div class="card">
+        <h2>Welcome to JavaScript</h2>
+
+        <p>
+            JavaScript is a programming language used to make websites
+            interactive and dynamic. It can control webpage content,
+            respond to user actions, validate forms, create animations
+            and communicate with servers.
+        </p>
+
+        <p>
+            This tutorial teaches JavaScript step by step.
+            Select any topic below to begin learning.
+        </p>
+
+        <input
+            type="text"
+            id="searchBox"
+            placeholder="Search JavaScript topics..."
+            oninput="searchTopics()"
+        >
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <p id="progressText">0 of 25 topics completed</p>
+    </div>
+
+    <div class="card">
+        <h2>JavaScript Curriculum</h2>
+
+        <div class="topic-grid" id="topicGrid"></div>
+    </div>
+
+    <div class="card">
+        <h2>Practice JavaScript</h2>
+
+        <p>
+            Write JavaScript code below and click Run Code
+            to see the result.
+        </p>
+
+        <textarea id="practiceCode">console.log("Hello, JavaScript!");
+
+let name = "Student";
+
+console.log("Welcome " + name);</textarea>
+
+        <br><br>
+
+        <button class="success" onclick="runPractice()">
+            Run Code
+        </button>
+
+        <button class="secondary" onclick="resetPractice()">
+            Reset Code
+        </button>
+
+        <h3>Output</h3>
+
+        <iframe id="practiceOutput"></iframe>
+    </div>
+
+</section>
+
+<!-- LESSON PAGE -->
+
+<section id="lessonPage" class="hidden">
+
+    <div class="card">
+
+        <div class="lesson-number" id="lessonNumber"></div>
+
+        <h2 id="lessonTitle"></h2>
+
+        <div id="lessonContent"></div>
+
+        <div class="navigation">
+
+            <button class="secondary" onclick="previousLesson()">
+                ← Back
+            </button>
+
+            <button class="primary" onclick="showCurriculum()">
+                Curriculum
+            </button>
+
+            <button class="primary" onclick="nextLesson()">
+                Next →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+<footer>
+    <p>JavaScript Learning Centre</p>
+    <p>Learn, practise and build your own websites.</p>
+</footer>
+
+<script>
+
+/* =========================
+   JAVASCRIPT LESSONS
+========================= */
+
+const lessons = [
+
+{
+title: "Introduction to JavaScript",
+description: "Learn what JavaScript is and why it is important.",
+content: `
+<h3>What is JavaScript?</h3>
+
+<p>
+JavaScript is a high-level programming language used to create
+interactive and dynamic websites.
+</p>
+
+<p>
+HTML provides the structure of a webpage.
+CSS controls its appearance.
+JavaScript controls its behaviour.
+</p>
+
+<h3>Uses of JavaScript</h3>
+
+<ul>
+<li>Creating interactive buttons</li>
+<li>Validating forms</li>
+<li>Building web applications</li>
+<li>Creating games</li>
+<li>Developing mobile applications</li>
+<li>Working with databases through servers</li>
+</ul>
+
+<h3>Example</h3>
+
+<pre><code>console.log("Hello World!");</code></pre>
+
+<p>
+The console.log() statement displays information in the browser
+developer console.
+</p>
+
+<div class="note">
+JavaScript can be written inside an HTML file using the
+&lt;script&gt; element.
+</div>
+
+<pre><code>&lt;script&gt;
+    alert("Welcome to JavaScript");
+&lt;/script&gt;</code></pre>
+`
+},
+
+{
+title: "History of JavaScript",
+description: "Understand the origin and development of JavaScript.",
+content: `
+<h3>History</h3>
+
+<p>
+JavaScript was created in 1995 by Brendan Eich while working
+at Netscape.
+</p>
+
+<p>
+It was originally developed to make webpages interactive.
+It later became one of the most widely used programming
+languages in web development.
+</p>
+
+<h3>ECMAScript</h3>
+
+<p>
+ECMAScript is the standard specification that defines
+JavaScript's language features.
+</p>
+
+<p>
+Modern JavaScript includes features such as:
+</p>
+
+<ul>
+<li>Let and const</li>
+<li>Arrow functions</li>
+<li>Classes</li>
+<li>Modules</li>
+<li>Promises</li>
+<li>Async and await</li>
+</ul>
+
+<pre><code>console.log("JavaScript has evolved!");</code></pre>
+`
+},
+
+{
+title: "Adding JavaScript to HTML",
+description: "Learn how to connect JavaScript with HTML.",
+content: `
+<h3>Using the Script Element</h3>
+
+<p>
+JavaScript can be written directly inside an HTML document
+using the script element.
+</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;h1&gt;My Website&lt;/h1&gt;
+
+&lt;script&gt;
+    alert("Welcome!");
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<h3>External JavaScript</h3>
+
+<p>
+You can also create a separate JavaScript file.
+For example, script.js.
+</p>
+
+<pre><code>&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+
+<p>
+External files make your website easier to organize.
+</p>
+`
+},
+
+{
+title: "JavaScript Syntax",
+description: "Learn the rules for writing JavaScript code.",
+content: `
+<h3>Syntax</h3>
+
+<p>
+Syntax refers to the rules used to write a programming language.
+</p>
+
+<h3>Statements</h3>
+
+<pre><code>let age = 20;
+console.log(age);</code></pre>
+
+<h3>Semicolons</h3>
+
+<p>
+Semicolons are commonly used to end JavaScript statements.
+JavaScript can insert some semicolons automatically,
+but writing them clearly is good practice.
+</p>
+
+<h3>Comments</h3>
+
+<pre><code>// This is a single-line comment
+
+/*
+This is a
+multi-line comment
+*/</code></pre>
+
+<p>
+Comments help explain your code and are ignored during execution.
+</p>
+`
+},
+
+{
+title: "Variables",
+description: "Learn how to store information in JavaScript.",
+content: `
+<h3>What is a Variable?</h3>
+
+<p>
+A variable is a named container used to store data.
+</p>
+
+<h3>Using let</h3>
+
+<pre><code>let username = "John";
+let age = 25;
+
+console.log(username);
+console.log(age);</code></pre>
+
+<p>
+The let keyword allows you to declare a variable
+whose value can be changed.
+</p>
+
+<h3>Using const</h3>
+
+<pre><code>const country = "Nigeria";</code></pre>
+
+<p>
+The const keyword is used when you do not intend
+to reassign the variable.
+</p>
+
+<h3>Using var</h3>
+
+<pre><code>var score = 100;</code></pre>
+
+<p>
+var is an older way of declaring variables.
+Modern JavaScript generally prefers let and const.
+</p>
+
+<div class="note">
+Use const by default when reassignment is not needed.
+Use let when the value must change.
+</div>
+`
+},
+
+{
+title: "Data Types",
+description: "Understand the different types of JavaScript data.",
+content: `
+<h3>Common Data Types</h3>
+
+<ul>
+<li>String</li>
+<li>Number</li>
+<li>Boolean</li>
+<li>Undefined</li>
+<li>Null</li>
+<li>Object</li>
+<li>Array</li>
+</ul>
+
+<h3>String</h3>
+
+<pre><code>let name = "David";</code></pre>
+
+<h3>Number</h3>
+
+<pre><code>let age = 30;
+let price = 150.50;</code></pre>
+
+<h3>Boolean</h3>
+
+<pre><code>let isStudent = true;</code></pre>
+
+<h3>Undefined</h3>
+
+<pre><code>let result;
+console.log(result);</code></pre>
+
+<h3>Null</h3>
+
+<pre><code>let selectedItem = null;</code></pre>
+
+<p>
+You can check a value's type using typeof.
+</p>
+
+<pre><code>console.log(typeof "Hello");
+console.log(typeof 25);
+console.log(typeof true);</code></pre>
+`
+},
+
+{
+title: "Operators",
+description: "Learn how to perform calculations and comparisons.",
+content: `
+<h3>Arithmetic Operators</h3>
+
+<pre><code>let a = 10;
+let b = 5;
+
+console.log(a + b);
+console.log(a - b);
+console.log(a * b);
+console.log(a / b);
+console.log(a % b);</code></pre>
+
+<h3>Comparison Operators</h3>
+
+<pre><code>console.log(10 > 5);
+console.log(10 < 5);
+console.log(10 === 10);
+console.log(10 !== 5);</code></pre>
+
+<h3>Logical Operators</h3>
+
+<pre><code>let age = 20;
+
+console.log(age >= 18 && age <= 60);
+console.log(age < 18 || age > 60);
+console.log(!(age === 20));</code></pre>
+
+<p>
+The && operator means AND.
+The || operator means OR.
+The ! operator means NOT.
+</p>
+`
+},
+
+{
+title: "Strings",
+description: "Learn how to work with text.",
+content: `
+<h3>Creating Strings</h3>
+
+<pre><code>let message = "Welcome";
+let name = 'John';</code></pre>
+
+<h3>String Concatenation</h3>
+
+<pre><code>let firstName = "John";
+let lastName = "Smith";
+
+let fullName = firstName + " " + lastName;
+
+console.log(fullName);</code></pre>
+
+<h3>Template Literals</h3>
+
+<pre><code>let name = "Mary";
+let age = 20;
+
+console.log(\`My name is \${name} and I am \${age}\`);</code></pre>
+
+<h3>String Properties and Methods</h3>
+
+<pre><code>let text = "JavaScript";
+
+console.log(text.length);
+console.log(text.toUpperCase());
+console.log(text.toLowerCase());
+console.log(text.includes("Script"));</code></pre>
+`
+},
+
+{
+title: "Numbers and Mathematics",
+description: "Perform mathematical operations in JavaScript.",
+content: `
+<h3>Mathematical Operations</h3>
+
+<pre><code>let x = 20;
+let y = 10;
+
+console.log(x + y);
+console.log(x - y);
+console.log(x * y);
+console.log(x / y);</code></pre>
+
+<h3>The Math Object</h3>
+
+<pre><code>console.log(Math.round(4.6));
+console.log(Math.floor(4.9));
+console.log(Math.ceil(4.1));
+console.log(Math.sqrt(25));
+console.log(Math.pow(2, 3));</code></pre>
+
+<h3>Random Numbers</h3>
+
+<pre><code>let randomNumber = Math.random();
+
+console.log(randomNumber);</code></pre>
+
+<p>
+Math.random() returns a number greater than or equal to 0
+and less than 1.
+</p>
+`
+},
+
+{
+title: "Conditional Statements",
+description: "Make decisions using if, else and switch.",
+content: `
+<h3>If Statement</h3>
+
+<pre><code>let age = 20;
+
+if (age >= 18) {
+    console.log("You are an adult");
+}</code></pre>
+
+<h3>If and Else</h3>
+
+<pre><code>let age = 15;
+
+if (age >= 18) {
+    console.log("Adult");
+} else {
+    console.log("Minor");
+}</code></pre>
+
+<h3>Else If</h3>
+
+<pre><code>let score = 75;
+
+if (score >= 80) {
+    console.log("Excellent");
+} else if (score >= 60) {
+    console.log("Good");
+} else {
+    console.log("Try again");
+}</code></pre>
+
+<h3>Switch Statement</h3>
+
+<pre><code>let day = 2;
+
+switch (day) {
+    case 1:
+        console.log("Monday");
+        break;
+    case 2:
+        console.log("Tuesday");
+        break;
+    default:
+        console.log("Unknown day");
+}</code></pre>
+`
+},
+
+{
+title: "Loops",
+description: "Repeat instructions using JavaScript loops.",
+content: `
+<h3>For Loop</h3>
+
+<pre><code>for (let i = 1; i <= 5; i++) {
+    console.log(i);
+}</code></pre>
+
+<h3>While Loop</h3>
+
+<pre><code>let i = 1;
+
+while (i <= 5) {
+    console.log(i);
+    i++;
+}</code></pre>
+
+<h3>Do While Loop</h3>
+
+<pre><code>let i = 1;
+
+do {
+    console.log(i);
+    i++;
+} while (i <= 5);</code></pre>
+
+<h3>Break and Continue</h3>
+
+<pre><code>for (let i = 1; i <= 10; i++) {
+
+    if (i === 5) {
+        break;
+    }
+
+    console.log(i);
+}</code></pre>
+
+<p>
+break stops a loop.
+continue skips the current iteration.
+</p>
+`
+},
+
+{
+title: "Functions",
+description: "Create reusable blocks of JavaScript code.",
+content: `
+<h3>What is a Function?</h3>
+
+<p>
+A function is a reusable block of code designed
+to perform a particular task.
+</p>
+
+<h3>Function Declaration</h3>
+
+<pre><code>function greet() {
+    console.log("Hello!");
+}
+
+greet();</code></pre>
+
+<h3>Parameters and Arguments</h3>
+
+<pre><code>function greet(name) {
+    console.log("Hello " + name);
+}
+
+greet("John");</code></pre>
+
+<h3>Return Values</h3>
+
+<pre><code>function add(a, b) {
+    return a + b;
+}
+
+let result = add(5, 3);
+
+console.log(result);</code></pre>
+
+<h3>Arrow Functions</h3>
+
+<pre><code>const multiply = (a, b) => {
+    return a * b;
+};
+
+console.log(multiply(4, 5));</code></pre>
+`
+},
+
+{
+title: "Arrays",
+description: "Store multiple values in a single variable.",
+content: `
+<h3>Creating an Array</h3>
+
+<pre><code>let fruits = ["Apple", "Orange", "Mango"];
+
+console.log(fruits);</code></pre>
+
+<h3>Accessing Array Items</h3>
+
+<pre><code>console.log(fruits[0]);
+console.log(fruits[1]);</code></pre>
+
+<p>
+Array positions begin at index 0.
+</p>
+
+<h3>Array Methods</h3>
+
+<pre><code>fruits.push("Banana");
+fruits.pop();
+
+fruits.unshift("Pineapple");
+fruits.shift();</code></pre>
+
+<h3>Looping Through Arrays</h3>
+
+<pre><code>for (let fruit of fruits) {
+    console.log(fruit);
+}</code></pre>
+
+<h3>Useful Methods</h3>
+
+<pre><code>let numbers = [1, 2, 3, 4];
+
+console.log(numbers.length);
+console.log(numbers.includes(3));
+console.log(numbers.indexOf(2));</code></pre>
+`
+},
+
+{
+title: "Objects",
+description: "Learn how to store related information together.",
+content: `
+<h3>Creating an Object</h3>
+
+<pre><code>let student = {
+    name: "John",
+    age: 20,
+    course: "Computer Science"
+};</code></pre>
+
+<h3>Accessing Properties</h3>
+
+<pre><code>console.log(student.name);
+console.log(student.age);</code></pre>
+
+<h3>Changing Properties</h3>
+
+<pre><code>student.age = 21;</code></pre>
+
+<h3>Adding Properties</h3>
+
+<pre><code>student.grade = "A";</code></pre>
+
+<h3>Object Methods</h3>
+
+<pre><code>let person = {
+    name: "Mary",
+
+    greet: function() {
+        console.log("Hello " + this.name);
+    }
+};
+
+person.greet();</code></pre>
+`
+},
+
+{
+title: "DOM Manipulation",
+description: "Use JavaScript to change webpage content.",
+content: `
+<h3>What is the DOM?</h3>
+
+<p>
+The Document Object Model represents an HTML document
+as a structure that JavaScript can access and modify.
+</p>
+
+<h3>Selecting Elements</h3>
+
+<pre><code>document.getElementById("title");
+
+document.querySelector(".box");
+
+document.querySelectorAll("p");</code></pre>
+
+<h3>Changing Text</h3>
+
+<pre><code>document.getElementById("title")
+    .textContent = "New Heading";</code></pre>
+
+<h3>Changing HTML</h3>
+
+<pre><code>document.getElementById("content")
+    .innerHTML = "&lt;b&gt;Hello&lt;/b&gt;";</code></pre>
+
+<h3>Changing CSS</h3>
+
+<pre><code>document.getElementById("title")
+    .style.color = "blue";</code></pre>
+
+<div class="warning">
+Be careful when inserting user-provided content with innerHTML.
+Use textContent when you only need to display plain text.
+</div>
+`
+},
+
+{
+title: "Events",
+description: "Respond to clicks, typing and other user actions.",
+content: `
+<h3>What is an Event?</h3>
+
+<p>
+An event is an action that happens in a webpage,
+such as clicking a button or typing in a field.
+</p>
+
+<h3>Click Event</h3>
+
+<pre><code>document.getElementById("btn")
+    .addEventListener("click", function() {
+        alert("Button clicked!");
+    });</code></pre>
+
+<h3>Mouse Events</h3>
+
+<pre><code>element.addEventListener("mouseover", function() {
+    console.log("Mouse entered");
+});</code></pre>
+
+<h3>Keyboard Events</h3>
+
+<pre><code>document.addEventListener("keydown", function(event) {
+    console.log(event.key);
+});</code></pre>
+
+<h3>Form Events</h3>
+
+<pre><code>form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    console.log("Form submitted");
+});</code></pre>
+`
+},
+
+{
+title: "Form Validation",
+description: "Check user input before processing a form.",
+content: `
+<h3>Why Validate Forms?</h3>
+
+<p>
+Form validation helps ensure that users enter
+the required information correctly.
+</p>
+
+<h3>Example</h3>
+
+<pre><code>function validateForm() {
+
+    let username =
+        document.getElementById("username").value;
+
+    if (username === "") {
+        alert("Please enter your name");
+        return false;
+    }
+
+    return true;
+}</code></pre>
+
+<h3>Checking Email</h3>
+
+<pre><code>let email = "student@example.com";
+
+if (email.includes("@")) {
+    console.log("Email contains @");
+}</code></pre>
+
+<p>
+Client-side validation improves user experience,
+but important data must also be validated on the server.
+</p>
+`
+},
+
+{
+title: "Date and Time",
+description: "Work with dates and time in JavaScript.",
+content: `
+<h3>Creating a Date</h3>
+
+<pre><code>let today = new Date();
+
+console.log(today);</code></pre>
+
+<h3>Getting Date Information</h3>
+
+<pre><code>console.log(today.getFullYear());
+console.log(today.getMonth());
+console.log(today.getDate());
+console.log(today.getHours());</code></pre>
+
+<p>
+Months are numbered from 0 to 11.
+January is 0 and December is 11.
+</p>
+
+<h3>Displaying a Date</h3>
+
+<pre><code>console.log(today.toDateString());
+console.log(today.toLocaleDateString());</code></pre>
+`
+},
+
+{
+title: "Error Handling",
+description: "Handle errors and prevent unexpected program failures.",
+content: `
+<h3>Try and Catch</h3>
+
+<pre><code>try {
+    let result = unknownVariable;
+    console.log(result);
+} catch (error) {
+    console.log("An error occurred");
+}</code></pre>
+
+<h3>Finally</h3>
+
+<pre><code>try {
+    console.log("Working");
+} catch (error) {
+    console.log(error);
+} finally {
+    console.log("Finished");
+}</code></pre>
+
+<h3>Throwing Errors</h3>
+
+<pre><code>function checkAge(age) {
+
+    if (age < 0) {
+        throw new Error("Age cannot be negative");
+    }
+
+    return age;
+}</code></pre>
+
+<p>
+Error handling helps your application respond
+properly when something goes wrong.
+</p>
+`
+},
+
+{
+title: "JSON",
+description: "Learn how JavaScript exchanges structured data.",
+content: `
+<h3>What is JSON?</h3>
+
+<p>
+JSON stands for JavaScript Object Notation.
+It is a common format for storing and exchanging data.
+</p>
+
+<h3>JSON Example</h3>
+
+<pre><code>{
+    "name": "John",
+    "age": 25,
+    "student": true
+}</code></pre>
+
+<h3>Convert Object to JSON</h3>
+
+<pre><code>let person = {
+    name: "John",
+    age: 25
+};
+
+let jsonData = JSON.stringify(person);
+
+console.log(jsonData);</code></pre>
+
+<h3>Convert JSON to Object</h3>
+
+<pre><code>let data = '{"name":"Mary","age":20}';
+
+let person = JSON.parse(data);
+
+console.log(person.name);</code></pre>
+`
+},
+
+{
+title: "Local Storage",
+description: "Store data in the user's browser.",
+content: `
+<h3>What is Local Storage?</h3>
+
+<p>
+Local Storage allows websites to save small amounts
+of data in the browser.
+</p>
+
+<h3>Saving Data</h3>
+
+<pre><code>localStorage.setItem("username", "John");</code></pre>
+
+<h3>Reading Data</h3>
+
+<pre><code>let name = localStorage.getItem("username");
+
+console.log(name);</code></pre>
+
+<h3>Removing Data</h3>
+
+<pre><code>localStorage.removeItem("username");</code></pre>
+
+<h3>Clearing Storage</h3>
+
+<pre><code>localStorage.clear();</code></pre>
+
+<div class="note">
+Local Storage stores data as strings.
+For objects and arrays, use JSON.stringify()
+and JSON.parse().
+</div>
+`
+},
+
+{
+title: "Promises and Async JavaScript",
+description: "Understand asynchronous programming.",
+content: `
+<h3>What is Asynchronous Programming?</h3>
+
+<p>
+Asynchronous programming allows JavaScript to perform
+operations without blocking the entire program.
+</p>
+
+<h3>Promise</h3>
+
+<pre><code>let promise = new Promise(function(resolve, reject) {
+
+    resolve("Task completed");
+
+});
+
+promise.then(function(result) {
+    console.log(result);
+});</code></pre>
+
+<h3>Async and Await</h3>
+
+<pre><code>async function getData() {
+
+    let result = await Promise.resolve("Hello");
+
+    console.log(result);
+}
+
+getData();</code></pre>
+
+<p>
+Promises are commonly used when working with APIs,
+network requests and other asynchronous operations.
+</p>
+`
+},
+
+{
+title: "Fetch API",
+description: "Retrieve information from online services.",
+content: `
+<h3>What is Fetch?</h3>
+
+<p>
+The Fetch API allows JavaScript to request data
+from a server.
+</p>
+
+<h3>Example</h3>
+
+<pre><code>fetch("https://jsonplaceholder.typicode.com/users")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.log("Error:", error);
+    });</code></pre>
+
+<h3>Using Async and Await</h3>
+
+<pre><code>async function loadUsers() {
+
+    try {
+
+        let response = await fetch(
+            "https://jsonplaceholder.typicode.com/users"
+        );
+
+        let data = await response.json();
+
+        console.log(data);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+}
+
+loadUsers();</code></pre>
+
+<p>
+Fetch requests require an internet connection
+when accessing online services.
+</p>
+`
+},
+
+{
+title: "JavaScript Classes",
+description: "Learn object-oriented programming with classes.",
+content: `
+<h3>What is a Class?</h3>
+
+<p>
+A class is a template used to create objects
+with related properties and methods.
+</p>
+
+<h3>Creating a Class</h3>
+
+<pre><code>class Student {
+
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    introduce() {
+        console.log("My name is " + this.name);
+    }
+}
+
+let student1 = new Student("John", 20);
+
+student1.introduce();</code></pre>
+
+<h3>Inheritance</h3>
+
+<pre><code>class Animal {
+
+    speak() {
+        console.log("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+
+    bark() {
+        console.log("Woof!");
+    }
+}
+
+let dog = new Dog();
+
+dog.speak();
+dog.bark();</code></pre>
+`
+},
+
+{
+title: "Modules",
+description: "Organize JavaScript into reusable files.",
+content: `
+<h3>What are Modules?</h3>
+
+<p>
+Modules allow you to divide JavaScript code
+into separate files.
+</p>
+
+<h3>Exporting</h3>
+
+<pre><code>// math.js
+
+export function add(a, b) {
+    return a + b;
+}</code></pre>
+
+<h3>Importing</h3>
+
+<pre><code>// main.js
+
+import { add } from "./math.js";
+
+console.log(add(5, 3));</code></pre>
+
+<p>
+JavaScript modules are commonly used in
+larger applications.
+</p>
+
+<div class="note">
+Modules usually require a web server or development
+server rather than opening the HTML file directly
+with the file:// address.
+</div>
+`
+},
+
+{
+title: "JavaScript Security and Best Practices",
+description: "Write cleaner and safer JavaScript code.",
+content: `
+<h3>Use Meaningful Names</h3>
+
+<pre><code>let studentName = "John";</code></pre>
+
+<h3>Use Strict Comparisons</h3>
+
+<pre><code>if (age === 18) {
+    console.log("Age is 18");
+}</code></pre>
+
+<h3>Avoid Unnecessary Global Variables</h3>
+
+<p>
+Variables declared inside functions are generally
+easier to manage than global variables.
+</p>
+
+<h3>Protect User Data</h3>
+
+<ul>
+<li>Validate user input.</li>
+<li>Do not store passwords in Local Storage.</li>
+<li>Avoid inserting untrusted HTML.</li>
+<li>Use secure HTTPS connections.</li>
+<li>Do not expose private API keys in frontend code.</li>
+</ul>
+
+<h3>Write Readable Code</h3>
+
+<pre><code>function calculateTotal(price, quantity) {
+
+    return price * quantity;
+
+}</code></pre>
+
+<p>
+Readable code is easier to understand, maintain
+and improve.
+</p>
+`
+},
+
+{
+title: "JavaScript Projects",
+description: "Apply your knowledge by building practical projects.",
+content: `
+<h3>Beginner Projects</h3>
+
+<ul>
+<li>Simple calculator</li>
+<li>Digital clock</li>
+<li>Number guessing game</li>
+<li>To-do list</li>
+<li>Student grade calculator</li>
+</ul>
+
+<h3>Intermediate Projects</h3>
+
+<ul>
+<li>Quiz application</li>
+<li>Weather application</li>
+<li>Expense tracker</li>
+<li>Notes application</li>
+<li>Image gallery</li>
+</ul>
+
+<h3>Advanced Projects</h3>
+
+<ul>
+<li>Chat application</li>
+<li>Online learning platform</li>
+<li>E-commerce website</li>
+<li>Real-time dashboard</li>
+<li>Full-stack web application</li>
+</ul>
+
+<div class="note">
+The best way to learn JavaScript is to practise
+by building real projects.
+</div>
+
+<h3>Congratulations!</h3>
+
+<p>
+You have reached the end of this JavaScript tutorial.
+Continue practising and build your own applications.
+</p>
+`
+}
+
+];
+
+
+/* =========================
+   CURRICULUM FUNCTIONS
+========================= */
+
+let currentLesson = 0;
+
+let completedLessons = [];
+
+function createCurriculum() {
+
+    const grid = document.getElementById("topicGrid");
+
+    grid.innerHTML = "";
+
+    lessons.forEach((lesson, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "topic-button";
+
+        button.innerHTML = `
+            ${index + 1}. ${lesson.title}
+            <span>${lesson.description}</span>
+        `;
+
+        button.onclick = function() {
+            openLesson(index);
+        };
+
+        grid.appendChild(button);
+
+    });
+
+}
+
+function searchTopics() {
+
+    const search =
+        document.getElementById("searchBox")
+        .value.toLowerCase();
+
+    const buttons =
+        document.querySelectorAll(".topic-button");
+
+    buttons.forEach(button => {
+
+        button.style.display =
+            button.textContent.toLowerCase().includes(search)
+            ? "block"
+            : "none";
+
+    });
+
+}
+
+
+/* =========================
+   LESSON NAVIGATION
+========================= */
+
+function openLesson(index) {
+
+    currentLesson = index;
+
+    document.getElementById("curriculumPage")
+        .classList.add("hidden");
+
+    document.getElementById("lessonPage")
+        .classList.remove("hidden");
+
+    displayLesson();
+
+}
+
+function displayLesson() {
+
+    const lesson = lessons[currentLesson];
+
+    document.getElementById("lessonNumber")
+        .textContent =
+        "Lesson " + (currentLesson + 1)
+        + " of " + lessons.length;
+
+    document.getElementById("lessonTitle")
+        .textContent = lesson.title;
+
+    document.getElementById("lessonContent")
+        .innerHTML = lesson.content;
+
+    completedLessons.push(currentLesson);
+
+    updateProgress();
+
+    window.scrollTo(0, 0);
+
+}
+
+function nextLesson() {
+
+    if (currentLesson < lessons.length - 1) {
+
+        currentLesson++;
+
+        displayLesson();
+
+    } else {
+
+        alert("Congratulations! You completed the tutorial.");
+
+        showCurriculum();
+
+    }
+
+}
+
+function previousLesson() {
+
+    if (currentLesson > 0) {
+
+        currentLesson--;
+
+        displayLesson();
+
+    } else {
+
+        showCurriculum();
+
+    }
+
+}
+
+function showCurriculum() {
+
+    document.getElementById("lessonPage")
+        .classList.add("hidden");
+
+    document.getElementById("curriculumPage")
+        .classList.remove("hidden");
+
+    window.scrollTo(0, 0);
+
+}
+
+function updateProgress() {
+
+    const completed =
+        new Set(completedLessons).size;
+
+    const percentage =
+        (completed / lessons.length) * 100;
+
+    document.getElementById("progressBar")
+        .style.width = percentage + "%";
+
+    document.getElementById("progressText")
+        .textContent =
+        completed + " of " + lessons.length
+        + " topics completed";
+
+}
+
+
+/* =========================
+   PRACTICE EDITOR
+========================= */
+
+function runPractice() {
+
+    const code =
+        document.getElementById("practiceCode").value;
+
+    const iframe =
+        document.getElementById("practiceOutput");
+
+    const safeCode = code.replace(/<\/script/gi, "<\\/script");
+
+    iframe.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+        <body>
+        <h3>JavaScript Output</h3>
+
+        <script>
+        const originalLog = console.log;
+
+        console.log = function(...args) {
+
+            const output = document.getElementById("result");
+
+            output.innerHTML +=
+                args.map(arg => String(arg)).join(" ")
+                + "<br>";
+
+            originalLog.apply(console, args);
+
+        };
+
+        window.onerror = function(message) {
+
+            document.getElementById("result")
+                .innerHTML +=
+                "Error: " + message + "<br>";
+
+        };
+
+        <\/script>
+
+        <div id="result"></div>
+
+        <script>
+        try {
+            ${safeCode}
+        } catch(error) {
+            document.getElementById("result")
+                .innerHTML += "Error: " + error.message;
+        }
+        <\/script>
+
+        </body>
+        </html>
+    `;
+
+}
+
+function resetPractice() {
+
+    document.getElementById("practiceCode").value =
+`console.log("Hello, JavaScript!");
+
+let name = "Student";
+
+console.log("Welcome " + name);`;
+
+    document.getElementById("practiceOutput").srcdoc = "";
+
+}
+
+
+/* =========================
+   START THE TUTORIAL
+========================= */
+
+createCurriculum();
+
+</script>
+    
+<script>(function(s){s.dataset.zone='11559866',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+</body>
+</html>
+ 
