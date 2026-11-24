@@ -1,0 +1,1458 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete HTML Tutorial</title>
+
+<script>(function(s){s.dataset.zone='11591593',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+    line-height: 1.7;
+}
+
+header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    text-align: center;
+    padding: 45px 15px;
+}
+
+header h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 16px;
+}
+
+.course-home {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.course-home h2 {
+    text-align: center;
+    color: #1d4ed8;
+    margin-bottom: 10px;
+}
+
+.intro {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.topic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.topic-btn {
+    display: block;
+    background: #eff6ff;
+    color: #1e40af;
+    padding: 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 1px solid #bfdbfe;
+    transition: 0.3s;
+}
+
+.topic-btn:hover {
+    background: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.lesson {
+    display: none;
+    max-width: 1000px;
+    margin: 25px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.lesson:target {
+    display: block;
+}
+
+.lesson h2 {
+    color: #1d4ed8;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #dbeafe;
+    padding-bottom: 10px;
+}
+
+.lesson h3 {
+    color: #1e40af;
+    margin-top: 22px;
+    margin-bottom: 8px;
+}
+
+.lesson p {
+    margin-bottom: 12px;
+}
+
+.lesson ul, .lesson ol {
+    margin: 10px 0 15px 25px;
+}
+
+.lesson li {
+    margin-bottom: 6px;
+}
+
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 15px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+code {
+    font-family: Consolas, monospace;
+}
+
+.example {
+    background: #f0fdf4;
+    border-left: 4px solid #16a34a;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+}
+
+.note {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+}
+
+.back-curriculum {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 12px 20px;
+    margin-top: 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-curriculum:hover {
+    background: #1e40af;
+}
+
+.lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.lesson-nav a {
+    display: inline-block;
+    background: #e2e8f0;
+    color: #1e293b;
+    padding: 10px 14px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.lesson-nav a:hover {
+    background: #cbd5e1;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #0f172a;
+    color: white;
+    margin-top: 35px;
+}
+
+@media(max-width: 600px) {
+    .topic-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .course-home, .lesson {
+        margin: 10px;
+        padding: 17px;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    .lesson-nav {
+        flex-wrap: wrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header id="home">
+    <h1>HTML COMPLETE COURSE</h1>
+    <p>Learn HTML from Beginner to Advanced</p>
+    <p>Select a topic below to start learning.</p>
+</header>
+
+<!-- CURRICULUM HOMEPAGE -->
+<div class="course-home" id="curriculum">
+
+    <h2>HTML Course Curriculum</h2>
+    <p class="intro">
+        Welcome to the complete HTML tutorial. Choose any topic you want to study.
+    </p>
+
+    <input
+        type="text"
+        class="search-box"
+        id="topicSearch"
+        placeholder="Search for a topic..."
+        oninput="searchTopics()"
+    >
+
+    <div class="topic-grid" id="topicGrid">
+
+        <a href="#intro" class="topic-btn">01. Introduction to HTML</a>
+        <a href="#history" class="topic-btn">02. History of HTML</a>
+        <a href="#structure" class="topic-btn">03. HTML Document Structure</a>
+        <a href="#elements" class="topic-btn">04. HTML Elements and Tags</a>
+        <a href="#attributes" class="topic-btn">05. HTML Attributes</a>
+        <a href="#headings" class="topic-btn">06. HTML Headings</a>
+        <a href="#paragraphs" class="topic-btn">07. HTML Paragraphs</a>
+        <a href="#formatting" class="topic-btn">08. Text Formatting</a>
+        <a href="#comments" class="topic-btn">09. HTML Comments</a>
+        <a href="#links" class="topic-btn">10. HTML Links</a>
+        <a href="#images" class="topic-btn">11. HTML Images</a>
+        <a href="#lists" class="topic-btn">12. HTML Lists</a>
+        <a href="#tables" class="topic-btn">13. HTML Tables</a>
+        <a href="#forms" class="topic-btn">14. HTML Forms</a>
+        <a href="#inputs" class="topic-btn">15. HTML Input Types</a>
+        <a href="#buttons" class="topic-btn">16. HTML Buttons</a>
+        <a href="#colors" class="topic-btn">17. HTML Colors</a>
+        <a href="#entities" class="topic-btn">18. HTML Entities</a>
+        <a href="#semantic" class="topic-btn">19. Semantic HTML</a>
+        <a href="#divspan" class="topic-btn">20. Div and Span</a>
+        <a href="#audio" class="topic-btn">21. HTML Audio</a>
+        <a href="#video" class="topic-btn">22. HTML Video</a>
+        <a href="#iframe" class="topic-btn">23. HTML Iframes</a>
+        <a href="#meta" class="topic-btn">24. Meta Tags</a>
+        <a href="#head" class="topic-btn">25. HTML Head Section</a>
+        <a href="#css" class="topic-btn">26. HTML and CSS</a>
+        <a href="#javascript" class="topic-btn">27. HTML and JavaScript</a>
+        <a href="#responsive" class="topic-btn">28. Responsive Web Design</a>
+        <a href="#accessibility" class="topic-btn">29. Web Accessibility</a>
+        <a href="#seo" class="topic-btn">30. HTML and SEO</a>
+        <a href="#apis" class="topic-btn">31. HTML5 APIs</a>
+        <a href="#best" class="topic-btn">32. HTML Best Practices</a>
+        <a href="#project" class="topic-btn">33. Practical HTML Project</a>
+        <a href="#exercise" class="topic-btn">34. Exercises and Questions</a>
+
+    </div>
+</div>
+
+<!-- LESSON 1 -->
+<section class="lesson" id="intro">
+<h2>01. Introduction to HTML</h2>
+
+<p>HTML stands for HyperText Markup Language. It is the standard markup language used to create web pages and structure content on the internet.</p>
+
+<h3>What is HTML?</h3>
+<p>HTML tells a web browser how to organize content such as headings, paragraphs, images, links, tables and forms.</p>
+
+<h3>Uses of HTML</h3>
+<ul>
+<li>Creating websites and web pages.</li>
+<li>Displaying text, images and videos.</li>
+<li>Creating forms for collecting information.</li>
+<li>Building the structure of web applications.</li>
+</ul>
+
+<h3>Basic HTML Example</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Website&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;p&gt;Welcome to HTML.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<div class="note">HTML provides structure. CSS controls appearance, while JavaScript adds interactivity.</div>
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 2 -->
+<section class="lesson" id="history">
+<h2>02. History of HTML</h2>
+
+<p>HTML was developed by Tim Berners-Lee around 1991 as a way to share and connect documents over the internet.</p>
+
+<h3>Major HTML Versions</h3>
+<ul>
+<li><b>HTML 1.0:</b> The earliest version, with basic document structure and links.</li>
+<li><b>HTML 2.0:</b> Introduced standardized features and forms.</li>
+<li><b>HTML 3.2:</b> Added tables, scripting and more presentation features.</li>
+<li><b>HTML 4.01:</b> Improved support for stylesheets and scripting.</li>
+<li><b>XHTML:</b> Applied stricter XML-style syntax rules to HTML.</li>
+<li><b>HTML5:</b> Introduced semantic elements, audio, video and modern browser features.</li>
+</ul>
+
+<h3>Importance of HTML5</h3>
+<p>Modern HTML supports multimedia, accessible page structures, forms and features needed by modern websites.</p>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 3 -->
+<section class="lesson" id="structure">
+<h2>03. HTML Document Structure</h2>
+
+<p>An HTML document follows a standard structure that helps browsers understand and display a web page.</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Website&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome&lt;/h1&gt;
+    &lt;p&gt;This is my website.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<h3>Explanation</h3>
+<ul>
+<li><b>DOCTYPE:</b> Declares that the document uses HTML5.</li>
+<li><b>html:</b> Contains the entire HTML document.</li>
+<li><b>head:</b> Holds metadata and page information.</li>
+<li><b>title:</b> Sets the browser tab title.</li>
+<li><b>body:</b> Contains the visible page content.</li>
+</ul>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 4 -->
+<section class="lesson" id="elements">
+<h2>04. HTML Elements and Tags</h2>
+
+<p>An HTML element is usually made up of an opening tag, content and a closing tag.</p>
+
+<pre><code>&lt;p&gt;This is a paragraph.&lt;/p&gt;</code></pre>
+
+<h3>Common HTML Elements</h3>
+<ul>
+<li><code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> — Headings.</li>
+<li><code>&lt;p&gt;</code> — Paragraph.</li>
+<li><code>&lt;a&gt;</code> — Link.</li>
+<li><code>&lt;img&gt;</code> — Image.</li>
+<li><code>&lt;div&gt;</code> — General container.</li>
+<li><code>&lt;ul&gt;</code> — Unordered list.</li>
+</ul>
+
+<h3>Empty Elements</h3>
+<p>Some elements do not have closing tags or contain content between tags.</p>
+<pre><code>&lt;br&gt;
+&lt;hr&gt;
+&lt;img src="photo.jpg" alt="Photo"&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 5 -->
+<section class="lesson" id="attributes">
+<h2>05. HTML Attributes</h2>
+
+<p>Attributes provide additional information about HTML elements. They are normally written inside the opening tag.</p>
+
+<pre><code>&lt;a href="https://example.com"&gt;Visit Website&lt;/a&gt;
+
+&lt;img src="photo.jpg" alt="A photograph"&gt;
+
+&lt;p class="intro"&gt;Welcome!&lt;/p&gt;</code></pre>
+
+<h3>Common Attributes</h3>
+<ul>
+<li><b>href:</b> Specifies a link destination.</li>
+<li><b>src:</b> Specifies a resource location.</li>
+<li><b>alt:</b> Provides alternative text for images.</li>
+<li><b>id:</b> Gives an element a unique identifier.</li>
+<li><b>class:</b> Groups elements for styling or scripting.</li>
+<li><b>style:</b> Adds inline CSS.</li>
+<li><b>title:</b> Provides additional advisory information.</li>
+</ul>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 6 -->
+<section class="lesson" id="headings">
+<h2>06. HTML Headings</h2>
+
+<p>HTML provides six heading levels, from h1 to h6.</p>
+
+<pre><code>&lt;h1&gt;Main Heading&lt;/h1&gt;
+&lt;h2&gt;Second Heading&lt;/h2&gt;
+&lt;h3&gt;Third Heading&lt;/h3&gt;
+&lt;h4&gt;Fourth Heading&lt;/h4&gt;
+&lt;h5&gt;Fifth Heading&lt;/h5&gt;
+&lt;h6&gt;Sixth Heading&lt;/h6&gt;</code></pre>
+
+<h3>Heading Importance</h3>
+<ul>
+<li>h1 represents the main heading of a page or section.</li>
+<li>h2 represents major subsections.</li>
+<li>h3 to h6 represent progressively nested sections.</li>
+</ul>
+
+<div class="note">Use headings in a logical order to make your page easier to understand and navigate.</div>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 7 -->
+<section class="lesson" id="paragraphs">
+<h2>07. HTML Paragraphs</h2>
+
+<p>The paragraph element is used to display blocks of text.</p>
+
+<pre><code>&lt;p&gt;This is my first paragraph.&lt;/p&gt;
+&lt;p&gt;This is my second paragraph.&lt;/p&gt;</code></pre>
+
+<h3>Line Break</h3>
+<p>The br element creates a line break.</p>
+<pre><code&gt;First line&lt;br&gt;
+Second line</code></pre>
+
+<h3>Horizontal Rule</h3>
+<p>The hr element creates a thematic break, commonly displayed as a horizontal line.</p>
+<pre><code>&lt;p&gt;First section&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Second section&lt;/p&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 8 -->
+<section class="lesson" id="formatting">
+<h2>08. HTML Text Formatting</h2>
+
+<p>HTML provides elements for emphasizing or identifying different kinds of text.</p>
+
+<pre><code>&lt;b&gt;Bold text&lt;/b&gt;
+&lt;strong&gt;Important text&lt;/strong&gt;
+&lt;i&gt;Italic text&lt;/i&gt;
+&lt;em&gt;Emphasized text&lt;/em&gt;
+&lt;u&gt;Underlined text&lt;/u&gt;
+&lt;mark&gt;Highlighted text&lt;/mark&gt;
+&lt;small&gt;Small text&lt;/small&gt;
+&lt;del&gt;Deleted text&lt;/del&gt;
+&lt;ins&gt;Inserted text&lt;/ins&gt;
+&lt;sub&gt;Subscript&lt;/sub&gt;
+&lt;sup&gt;Superscript&lt;/sup&gt;</code></pre>
+
+<h3>Example</h3>
+<pre><code>&lt;p&gt;Water is H&lt;sub&gt;2&lt;/sub&gt;O.&lt;/p&gt;
+&lt;p&gt;10&lt;sup&gt;2&lt;/sup&gt; equals 100.&lt;/p&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 9 -->
+<section class="lesson" id="comments">
+<h2>09. HTML Comments</h2>
+
+<p>Comments are notes written in HTML code. They are not displayed as page content by the browser.</p>
+
+<pre><code>&lt;!-- This is an HTML comment --&gt;
+
+&lt;h1&gt;Welcome&lt;/h1&gt;
+
+&lt;!-- This is another comment --&gt;</code></pre>
+
+<h3>Uses of Comments</h3>
+<ul>
+<li>Explaining code.</li>
+<li>Organizing large documents.</li>
+<li>Leaving notes for other developers.</li>
+<li>Temporarily disabling code during testing.</li>
+</ul>
+
+<div class="note">Comments are visible in the page source. Do not put passwords or private information inside them.</div>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 10 -->
+<section class="lesson" id="links">
+<h2>10. HTML Links</h2>
+
+<p>Links allow users to move from one page or resource to another. The anchor element creates links.</p>
+
+<pre><code>&lt;a href="https://www.google.com"&gt;
+    Visit Google
+&lt;/a&gt;</code></pre>
+
+<h3>Opening a Link in a New Tab</h3>
+<pre><code>&lt;a href="https://example.com"
+   target="_blank"
+   rel="noopener"&gt;
+   Open Website
+&lt;/a&gt;</code></pre>
+
+<h3>Link to Another Page</h3>
+<pre><code>&lt;a href="about.html"&gt;About Us&lt;/a&gt;</code></pre>
+
+<h3>Link to a Section</h3>
+<pre><code>&lt;a href="#contact"&gt;Go to Contact&lt;/a&gt;
+
+&lt;h2 id="contact"&gt;Contact Us&lt;/h2&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 11 -->
+<section class="lesson" id="images">
+<h2>11. HTML Images</h2>
+
+<p>The img element displays an image on a web page.</p>
+
+<pre><code>&lt;img src="picture.jpg"
+     alt="A beautiful landscape"
+     width="300"&gt;</code></pre>
+
+<h3>Important Image Attributes</h3>
+<ul>
+<li><b>src:</b> Image file location.</li>
+<li><b>alt:</b> Alternative description.</li>
+<li><b>width:</b> Image width.</li>
+<li><b>height:</b> Image height.</li>
+</ul>
+
+<h3>Image from a Folder</h3>
+<pre><code>&lt;img src="images/photo.jpg"
+     alt="My photo"&gt;</code></pre>
+
+<h3>Clickable Image</h3>
+<pre><code>&lt;a href="https://example.com"&gt;
+    &lt;img src="logo.png" alt="Website logo"&gt;
+&lt;/a&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 12 -->
+<section class="lesson" id="lists">
+<h2>12. HTML Lists</h2>
+
+<p>HTML supports different types of lists for organizing information.</p>
+
+<h3>Unordered List</h3>
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;Apple&lt;/li&gt;
+    &lt;li&gt;Orange&lt;/li&gt;
+    &lt;li&gt;Banana&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+<h3>Ordered List</h3>
+<pre><code>&lt;ol&gt;
+    &lt;li&gt;Wake up&lt;/li&gt;
+    &lt;li&gt;Take breakfast&lt;/li&gt;
+    &lt;li&gt;Go to school&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+<h3>Description List</h3>
+<pre><code>&lt;dl&gt;
+    &lt;dt&gt;HTML&lt;/dt&gt;
+    &lt;dd&gt;A markup language for web pages.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 13 -->
+<section class="lesson" id="tables">
+<h2>13. HTML Tables</h2>
+
+<p>Tables organize information into rows and columns.</p>
+
+<pre><code>&lt;table border="1"&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Name&lt;/th&gt;
+        &lt;th&gt;Age&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;John&lt;/td&gt;
+        &lt;td&gt;20&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Mary&lt;/td&gt;
+        &lt;td&gt;22&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+
+<h3>Table Elements</h3>
+<ul>
+<li><b>table:</b> Creates a table.</li>
+<li><b>tr:</b> Creates a table row.</li>
+<li><b>th:</b> Creates a header cell.</li>
+<li><b>td:</b> Creates a data cell.</li>
+<li><b>caption:</b> Adds a table caption.</li>
+<li><b>thead, tbody, tfoot:</b> Organize table sections.</li>
+</ul>
+
+<h3>Merge Cells</h3>
+<pre><code>&lt;td colspan="2"&gt;Combined Columns&lt;/td&gt;
+&lt;td rowspan="2"&gt;Combined Rows&lt;/td&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 14 -->
+<section class="lesson" id="forms">
+<h2>14. HTML Forms</h2>
+
+<p>Forms collect information from users. They are commonly used for registration, login, feedback and contact pages.</p>
+
+<pre><code>&lt;form action="submit.php" method="post"&gt;
+
+    &lt;label for="name"&gt;Full Name:&lt;/label&gt;
+    &lt;input type="text" id="name" name="name"&gt;
+
+    &lt;label for="email"&gt;Email:&lt;/label&gt;
+    &lt;input type="email" id="email" name="email"&gt;
+
+    &lt;button type="submit"&gt;Submit&lt;/button&gt;
+
+&lt;/form&gt;</code></pre>
+
+<h3>Form Attributes</h3>
+<ul>
+<li><b>action:</b> Specifies where form data is sent.</li>
+<li><b>method:</b> Specifies how data is sent, commonly GET or POST.</li>
+<li><b>name:</b> Identifies a submitted field.</li>
+<li><b>required:</b> Makes a field mandatory.</li>
+</ul>
+
+<div class="note">HTML creates the form interface. A server-side language or service is usually needed to process and store submitted data.</div>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 15 -->
+<section class="lesson" id="inputs">
+<h2>15. HTML Input Types</h2>
+
+<p>The input element allows users to enter or select information.</p>
+
+<pre><code>&lt;input type="text"&gt;
+&lt;input type="password"&gt;
+&lt;input type="email"&gt;
+&lt;input type="number"&gt;
+&lt;input type="tel"&gt;
+&lt;input type="date"&gt;
+&lt;input type="time"&gt;
+&lt;input type="file"&gt;
+&lt;input type="checkbox"&gt;
+&lt;input type="radio"&gt;
+&lt;input type="color"&gt;
+&lt;input type="range"&gt;
+&lt;input type="search"&gt;
+&lt;input type="url"&gt;
+&lt;input type="submit"&gt;</code></pre>
+
+<h3>Textarea</h3>
+<pre><code>&lt;textarea rows="5" cols="30"&gt;
+Write your message here
+&lt;/textarea&gt;</code></pre>
+
+<h3>Select Menu</h3>
+<pre><code>&lt;select name="country"&gt;
+    &lt;option&gt;Nigeria&lt;/option&gt;
+    &lt;option&gt;Ghana&lt;/option&gt;
+    &lt;option&gt;Kenya&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 16 -->
+<section class="lesson" id="buttons">
+<h2>16. HTML Buttons</h2>
+
+<p>Buttons allow users to perform actions on a web page.</p>
+
+<pre><code>&lt;button type="button"&gt;Click Me&lt;/button&gt;
+
+&lt;button type="submit"&gt;Submit Form&lt;/button&gt;
+
+&lt;button type="reset"&gt;Reset Form&lt;/button&gt;</code></pre>
+
+<h3>Button with JavaScript</h3>
+<pre><code>&lt;button onclick="alert('Hello!')"&gt;
+    Click Here
+&lt;/button&gt;</code></pre>
+
+<h3>Button Types</h3>
+<ul>
+<li><b>button:</b> A general-purpose button.</li>
+<li><b>submit:</b> Submits a form.</li>
+<li><b>reset:</b> Resets form fields to their initial values.</li>
+</ul>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 17 -->
+<section class="lesson" id="colors">
+<h2>17. HTML Colors</h2>
+
+<p>HTML can display colors through CSS. Colors can be written using names, hexadecimal values, RGB or HSL.</p>
+
+<h3>Color Names</h3>
+<pre><code>&lt;p style="color:red"&gt;Red Text&lt;/p&gt;
+&lt;p style="color:blue"&gt;Blue Text&lt;/p&gt;</code></pre>
+
+<h3>Hexadecimal Colors</h3>
+<pre><code>&lt;p style="color:#ff0000"&gt;Red Text&lt;/p&gt;
+&lt;p style="color:#0000ff"&gt;Blue Text&lt;/p&gt;</code></pre>
+
+<h3>RGB Colors</h3>
+<pre><code>&lt;p style="color:rgb(255,0,0)"&gt;
+    Red Text
+&lt;/p&gt;</code></pre>
+
+<h3>Background Color</h3>
+<pre><code>&lt;body style="background-color:lightblue"&gt;
+    &lt;h1&gt;My Website&lt;/h1&gt;
+&lt;/body&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 18 -->
+<section class="lesson" id="entities">
+<h2>18. HTML Entities</h2>
+
+<p>HTML entities display reserved characters and special symbols.</p>
+
+<h3>Common Entities</h3>
+<ul>
+<li><code>&amp;lt;</code> displays &lt;</li>
+<li><code>&amp;gt;</code> displays &gt;</li>
+<li><code>&amp;amp;</code> displays &amp;</li>
+<li><code>&amp;nbsp;</code> represents a non-breaking space.</li>
+<li><code>&amp;copy;</code> displays ©</li>
+<li><code>&amp;reg;</code> displays ®</li>
+<li><code>&amp;euro;</code> displays €</li>
+</ul>
+
+<h3>Example</h3>
+<pre><code>&lt;p&gt;5 &amp;lt; 10&lt;/p&gt;
+&lt;p&gt;Copyright &amp;copy; 2026&lt;/p&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 19 -->
+<section class="lesson" id="semantic">
+<h2>19. Semantic HTML</h2>
+
+<p>Semantic HTML uses elements that describe the meaning and purpose of their content.</p>
+
+<h3>Common Semantic Elements</h3>
+<ul>
+<li><b>header:</b> Introductory content or a page header.</li>
+<li><b>nav:</b> Navigation links.</li>
+<li><b>main:</b> Main page content.</li>
+<li><b>section:</b> A thematic section.</li>
+<li><b>article:</b> Independent content.</li>
+<li><b>aside:</b> Related or supplementary content.</li>
+<li><b>footer:</b> Footer information.</li>
+<li><b>figure:</b> Self-contained media or illustration.</li>
+</ul>
+
+<h3>Example</h3>
+<pre><code>&lt;header&gt;
+    &lt;h1&gt;My Website&lt;/h1&gt;
+&lt;/header&gt;
+
+&lt;nav&gt;
+    &lt;a href="#home"&gt;Home&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;main&gt;
+    &lt;article&gt;
+        &lt;h2&gt;About HTML&lt;/h2&gt;
+        &lt;p&gt;HTML structures web pages.&lt;/p&gt;
+    &lt;/article&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;Copyright 2026&lt;/footer&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 20 -->
+<section class="lesson" id="divspan">
+<h2>20. Div and Span</h2>
+
+<p>Div and span are general-purpose container elements used to group content.</p>
+
+<h3>Div Element</h3>
+<p>Div is a block-level container commonly used to group larger sections of content.</p>
+<pre><code>&lt;div class="container"&gt;
+    &lt;h2&gt;Welcome&lt;/h2&gt;
+    &lt;p&gt;This is a section.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+
+<h3>Span Element</h3>
+<p>Span is an inline container commonly used to style a small part of text.</p>
+<pre><code>&lt;p&gt;
+    Learn &lt;span style="color:red"&gt;HTML&lt;/span&gt;
+    today.
+&lt;/p&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 21 -->
+<section class="lesson" id="audio">
+<h2>21. HTML Audio</h2>
+
+<p>The audio element embeds sound files into a web page.</p>
+
+<pre><code>&lt;audio controls&gt;
+    &lt;source src="music.mp3" type="audio/mpeg"&gt;
+    Your browser does not support audio.
+&lt;/audio&gt;</code></pre>
+
+<h3>Audio Attributes</h3>
+<ul>
+<li><b>controls:</b> Displays playback controls.</li>
+<li><b>autoplay:</b> Requests automatic playback, subject to browser policies.</li>
+<li><b>loop:</b> Repeats the audio.</li>
+<li><b>muted:</b> Starts the audio muted.</li>
+<li><b>preload:</b> Gives the browser a loading hint.</li>
+</ul>
+
+<div class="note">Many browsers block autoplay with sound. Provide controls so users can start playback themselves.</div>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 22 -->
+<section class="lesson" id="video">
+<h2>22. HTML Video</h2>
+
+<p>The video element embeds video files into web pages.</p>
+
+<pre><code>&lt;video width="400" controls&gt;
+    &lt;source src="movie.mp4" type="video/mp4"&gt;
+    Your browser does not support video.
+&lt;/video&gt;</code></pre>
+
+<h3>Common Video Attributes</h3>
+<ul>
+<li><b>controls:</b> Displays video controls.</li>
+<li><b>width:</b> Sets video width.</li>
+<li><b>height:</b> Sets video height.</li>
+<li><b>poster:</b> Specifies a preview image.</li>
+<li><b>loop:</b> Repeats the video.</li>
+<li><b>muted:</b> Mutes the video.</li>
+</ul>
+
+<h3>Video with Captions</h3>
+<pre><code>&lt;video controls&gt;
+    &lt;source src="lesson.mp4" type="video/mp4"&gt;
+    &lt;track src="captions.vtt"
+           kind="captions"
+           srclang="en"
+           label="English"&gt;
+&lt;/video&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 23 -->
+<section class="lesson" id="iframe">
+<h2>23. HTML Iframes</h2>
+
+<p>An iframe embeds another web page or document inside the current page.</p>
+
+<pre><code>&lt;iframe
+    src="https://example.com"
+    width="400"
+    height="300"
+    title="Example website"&gt;
+&lt;/iframe&gt;</code></pre>
+
+<h3>Uses of Iframes</h3>
+<ul>
+<li>Embedding maps.</li>
+<li>Displaying videos from supported services.</li>
+<li>Embedding documents.</li>
+<li>Displaying other web pages when permitted.</li>
+</ul>
+
+<div class="note">Some websites block iframe embedding for security reasons. Only embed content from trusted sources.</div>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 24 -->
+<section class="lesson" id="meta">
+<h2>24. HTML Meta Tags</h2>
+
+<p>Meta elements provide information about an HTML document. They are placed inside the head element.</p>
+
+<pre><code>&lt;meta charset="UTF-8"&gt;
+
+&lt;meta name="viewport"
+      content="width=device-width, initial-scale=1.0"&gt;
+
+&lt;meta name="description"
+      content="Learn HTML programming."&gt;
+
+&lt;meta name="author"
+      content="Website Author"&gt;</code></pre>
+
+<h3>Importance of Meta Tags</h3>
+<ul>
+<li>Specify character encoding.</li>
+<li>Help control mobile viewport behavior.</li>
+<li>Provide page descriptions.</li>
+<li>Identify document authors.</li>
+</ul>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 25 -->
+<section class="lesson" id="head">
+<h2>25. HTML Head Section</h2>
+
+<p>The head element contains information about the document that is not normally displayed as the main page content.</p>
+
+<pre><code>&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Website&lt;/title&gt;
+
+    &lt;meta name="viewport"
+          content="width=device-width, initial-scale=1.0"&gt;
+
+    &lt;link rel="stylesheet" href="style.css"&gt;
+
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;</code></pre>
+
+<h3>Elements Commonly Used in Head</h3>
+<ul>
+<li>title</li>
+<li>meta</li>
+<li>link</li>
+<li>style</li>
+<li>script</li>
+<li>base</li>
+</ul>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 26 -->
+<section class="lesson" id="css">
+<h2>26. HTML and CSS</h2>
+
+<p>CSS stands for Cascading Style Sheets. It is used to control the appearance and layout of HTML elements.</p>
+
+<h3>Inline CSS</h3>
+<pre><code>&lt;p style="color:blue;"&gt;
+    Blue paragraph
+&lt;/p&gt;</code></pre>
+
+<h3>Internal CSS</h3>
+<pre><code>&lt;style&gt;
+    h1 {
+        color: blue;
+        text-align: center;
+    }
+&lt;/style&gt;</code></pre>
+
+<h3>External CSS</h3>
+<pre><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
+
+<h3>CSS Example</h3>
+<pre><code>body {
+    background-color: lightblue;
+    font-family: Arial;
+}
+
+h1 {
+    color: navy;
+}
+
+p {
+    font-size: 18px;
+}</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 27 -->
+<section class="lesson" id="javascript">
+<h2>27. HTML and JavaScript</h2>
+
+<p>JavaScript adds behavior and interactivity to HTML pages.</p>
+
+<h3>JavaScript Example</h3>
+<pre><code>&lt;button onclick="showMessage()"&gt;
+    Click Me
+&lt;/button&gt;
+
+&lt;p id="result"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+function showMessage() {
+    document.getElementById("result").textContent =
+        "Welcome to JavaScript!";
+}
+&lt;/script&gt;</code></pre>
+
+<h3>What JavaScript Can Do</h3>
+<ul>
+<li>Respond to button clicks.</li>
+<li>Validate form input.</li>
+<li>Change HTML content.</li>
+<li>Show messages and alerts.</li>
+<li>Build interactive web applications.</li>
+</ul>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 28 -->
+<section class="lesson" id="responsive">
+<h2>28. Responsive Web Design</h2>
+
+<p>Responsive web design makes websites adapt to different screen sizes, including phones, tablets and computers.</p>
+
+<h3>Viewport Meta Tag</h3>
+<pre><code>&lt;meta name="viewport"
+content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+
+<h3>Flexible Layout with CSS</h3>
+<pre><code>.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.item {
+    flex: 1 1 250px;
+}</code></pre>
+
+<h3>Media Queries</h3>
+<pre><code>@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+    }
+}</code></pre>
+
+<h3>Responsive Images</h3>
+<pre><code>img {
+    max-width: 100%;
+    height: auto;
+}</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 29 -->
+<section class="lesson" id="accessibility">
+<h2>29. Web Accessibility</h2>
+
+<p>Accessibility means designing websites so people with different abilities can use them.</p>
+
+<h3>Accessibility Practices</h3>
+<ul>
+<li>Provide descriptive alt text for meaningful images.</li>
+<li>Use headings in a logical order.</li>
+<li>Use labels for form fields.</li>
+<li>Make interactive controls usable with a keyboard.</li>
+<li>Use sufficient color contrast.</li>
+<li>Provide captions for videos where appropriate.</li>
+<li>Use semantic HTML elements.</li>
+</ul>
+
+<h3>Accessible Form Example</h3>
+<pre><code>&lt;label for="email"&gt;Email Address&lt;/label&gt;
+
+&lt;input type="email"
+       id="email"
+       name="email"
+       required&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 30 -->
+<section class="lesson" id="seo">
+<h2>30. HTML and SEO</h2>
+
+<p>SEO stands for Search Engine Optimization. It involves improving a website so search engines can understand and present its pages effectively.</p>
+
+<h3>HTML SEO Practices</h3>
+<ul>
+<li>Write meaningful page titles.</li>
+<li>Use descriptive meta descriptions.</li>
+<li>Organize content with proper headings.</li>
+<li>Use descriptive link text.</li>
+<li>Provide useful image alt text.</li>
+<li>Use semantic HTML.</li>
+<li>Create useful and original content.</li>
+</ul>
+
+<h3>Example</h3>
+<pre><code>&lt;title&gt;Learn HTML for Beginners&lt;/title&gt;
+
+&lt;meta name="description"
+content="A beginner-friendly HTML tutorial."&gt;
+
+&lt;h1&gt;Learn HTML&lt;/h1&gt;
+
+&lt;p&gt;Start learning web development today.&lt;/p&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 31 -->
+<section class="lesson" id="apis">
+<h2>31. HTML5 APIs</h2>
+
+<p>Modern browsers provide web APIs that JavaScript can use to access browser features and services.</p>
+
+<h3>Examples of Web APIs</h3>
+<ul>
+<li><b>Geolocation API:</b> Can request the user's location.</li>
+<li><b>Canvas API:</b> Draws graphics using JavaScript.</li>
+<li><b>Web Storage API:</b> Stores information in the browser.</li>
+<li><b>Drag and Drop API:</b> Supports dragging and dropping.</li>
+<li><b>Web Audio API:</b> Processes and generates audio.</li>
+<li><b>Fetch API:</b> Makes network requests.</li>
+</ul>
+
+<h3>Local Storage Example</h3>
+<pre><code>&lt;script&gt;
+localStorage.setItem("username", "John");
+
+let name = localStorage.getItem("username");
+
+document.write(name);
+&lt;/script&gt;</code></pre>
+
+<div class="note">Some APIs require permission or a secure context such as HTTPS. Browser and WebView support may vary.</div>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 32 -->
+<section class="lesson" id="best">
+<h2>32. HTML Best Practices</h2>
+
+<p>Good coding practices make HTML documents easier to read, maintain and use.</p>
+
+<h3>Important Practices</h3>
+<ul>
+<li>Always declare the HTML5 doctype.</li>
+<li>Use meaningful element names and structure.</li>
+<li>Write clean and properly indented code.</li>
+<li>Use lowercase tag and attribute names consistently.</li>
+<li>Quote attribute values.</li>
+<li>Provide alt text for meaningful images.</li>
+<li>Use semantic elements where appropriate.</li>
+<li>Separate CSS and JavaScript when practical.</li>
+<li>Test pages on different screen sizes.</li>
+<li>Validate your HTML code.</li>
+</ul>
+
+<h3>Good HTML Example</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport"
+          content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Website&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;main&gt;
+        &lt;h1&gt;Welcome&lt;/h1&gt;
+        &lt;p&gt;My first website.&lt;/p&gt;
+    &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 33 -->
+<section class="lesson" id="project">
+<h2>33. Practical HTML Project</h2>
+
+<p>In this project, you will create a simple personal profile website using HTML.</p>
+
+<h3>Project Code</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport"
+          content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Profile&lt;/title&gt;
+
+    &lt;style&gt;
+        body {
+            font-family: Arial;
+            background: #f1f5f9;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .profile {
+            background: white;
+            padding: 25px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 12px;
+        }
+
+        img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        a {
+            color: blue;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+    &lt;div class="profile"&gt;
+
+        &lt;h1&gt;My Personal Profile&lt;/h1&gt;
+
+        &lt;img src="profile.jpg" alt="My profile photo"&gt;
+
+        &lt;h2&gt;John Smith&lt;/h2&gt;
+
+        &lt;p&gt;I am a web development student.&lt;/p&gt;
+
+        &lt;h3&gt;My Skills&lt;/h3&gt;
+
+        &lt;ul&gt;
+            &lt;li&gt;HTML&lt;/li&gt;
+            &lt;li&gt;CSS&lt;/li&gt;
+            &lt;li&gt;JavaScript&lt;/li&gt;
+        &lt;/ul&gt;
+
+        &lt;a href="mailto:example@email.com"&gt;
+            Contact Me
+        &lt;/a&gt;
+
+    &lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<h3>Project Requirements</h3>
+<ol>
+<li>Create an HTML file.</li>
+<li>Add your name and profile image.</li>
+<li>Write a short biography.</li>
+<li>Create a list of your skills.</li>
+<li>Add a contact link.</li>
+<li>Use CSS to style the page.</li>
+</ol>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<!-- LESSON 34 -->
+<section class="lesson" id="exercise">
+<h2>34. HTML Exercises and Questions</h2>
+
+<h3>Exercise 1: Basic HTML</h3>
+<p>Write an HTML document containing a heading and a paragraph.</p>
+
+<h3>Exercise 2: Links</h3>
+<p>Create a link that opens the Google website.</p>
+
+<h3>Exercise 3: Images</h3>
+<p>Display an image with a width of 300 pixels and appropriate alternative text.</p>
+
+<h3>Exercise 4: Lists</h3>
+<p>Create an ordered list containing five programming languages.</p>
+
+<h3>Exercise 5: Tables</h3>
+<p>Create a table showing the names and ages of three students.</p>
+
+<h3>Exercise 6: Forms</h3>
+<p>Create a registration form with name, email and password fields.</p>
+
+<h3>Exercise 7: Semantic HTML</h3>
+<p>Create a page using header, nav, main, section and footer.</p>
+
+<h3>Exercise 8: Practical Project</h3>
+<p>Create a complete personal portfolio page using HTML and CSS.</p>
+
+<h3>Test Your Knowledge</h3>
+
+<div class="example">
+    <p><b>Question 1:</b> What does HTML stand for?</p>
+    <details>
+        <summary>Show Answer</summary>
+        HyperText Markup Language.
+    </details>
+</div>
+
+<div class="example">
+    <p><b>Question 2:</b> Which HTML element creates a paragraph?</p>
+    <details>
+        <summary>Show Answer</summary>
+        The p element: &lt;p&gt;.
+    </details>
+</div>
+
+<div class="example">
+    <p><b>Question 3:</b> Which attribute specifies an image location?</p>
+    <details>
+        <summary>Show Answer</summary>
+        The src attribute.
+    </details>
+</div>
+
+<div class="example">
+    <p><b>Question 4:</b> Which element creates a hyperlink?</p>
+    <details>
+        <summary>Show Answer</summary>
+        The a element.
+    </details>
+</div>
+
+<div class="example">
+    <p><b>Question 5:</b> What is the purpose of CSS?</p>
+    <details>
+        <summary>Show Answer</summary>
+        CSS controls the appearance and layout of web pages.
+    </details>
+</div>
+
+<a href="#home" class="back-curriculum">← Back to Curriculum</a>
+</section>
+
+<footer>
+    <p>HTML Complete Course</p>
+    <p>Learn HTML, Build Websites and Become a Web Developer.</p>
+</footer>
+
+<script>
+// Search course topics
+function searchTopics() {
+    let input = document.getElementById("topicSearch")
+        .value.toLowerCase();
+
+    let buttons = document.querySelectorAll(".topic-btn");
+
+    buttons.forEach(function(button) {
+        let text = button.textContent.toLowerCase();
+
+        button.style.display =
+            text.includes(input) ? "block" : "none";
+    });
+}
+
+// Show the selected lesson and hide the curriculum
+function showCorrectPage() {
+    let hash = window.location.hash;
+
+    let home = document.getElementById("curriculum");
+    let lessons = document.querySelectorAll(".lesson");
+
+    lessons.forEach(function(lesson) {
+        lesson.style.display = "none";
+    });
+
+    if (hash && hash !== "#home" && hash !== "#curriculum") {
+        let selected = document.querySelector(hash);
+
+        if (selected && selected.classList.contains("lesson")) {
+            home.style.display = "none";
+            selected.style.display = "block";
+            window.scrollTo(0, 0);
+            return;
+        }
+    }
+
+    home.style.display = "block";
+    window.scrollTo(0, 0);
+}
+
+// Run when the page opens or the URL changes
+window.addEventListener("load", showCorrectPage);
+window.addEventListener("hashchange", showCorrectPage);
+</script>
+
+</body>
+</html>
+    
